@@ -1,0 +1,50 @@
+############################
+# GENERAL
+############################
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.tmp
+
+############################
+# ENVIRONMENT VARIABLES
+############################
+.env
+.env.*
+!.env.example
+
+############################
+# PYTHON / FASTAPI
+############################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# FastAPI
+*.sqlite3
+
+############################
+# ALEMBIC
+############################
+alembic/versions/*.pyc
+
+############################
+# DATABASE
+############################
+*.dump
+*.sql
