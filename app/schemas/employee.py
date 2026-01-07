@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 
 class EmployeeBase(BaseModel):
@@ -25,5 +25,18 @@ class EmployeeRead(EmployeeBase):
     id: int
     create_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
+
+
+class EmployeeUpdate(BaseModel):
+    first_name: str | None = None
+    last_name: str | None = None
+    dni: str | None = None
+    ruc: str | None = None
+    gender: str | None = None
+    birth_date: date | None = None
+    phone_number: str | None = None
+    email: EmailStr | None = None
+    is_active: bool | None = None
+    position: str | None = None
+    address: str | None = None

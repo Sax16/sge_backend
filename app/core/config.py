@@ -1,4 +1,5 @@
-from pydantic import BaseSettings, Field
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -8,9 +9,10 @@ class Settings(BaseSettings):
     postgres_host: str = Field("localhost", env="POSTGRES_HOST")
     postgres_port: int = Field(5432, env="POSTGRES_PORT")
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
 
     @property
     def sync_database_url(self) -> str:
