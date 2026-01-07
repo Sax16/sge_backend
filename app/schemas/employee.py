@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from app.core.enums import GenderEnum, PositionEnum
 
 from pydantic import BaseModel, EmailStr, ConfigDict
 
@@ -8,12 +9,12 @@ class EmployeeBase(BaseModel):
     last_name: str
     dni: str
     ruc: str | None = None
-    gender: str
+    gender: GenderEnum
     birth_date: date | None = None
     phone_number: str | None = None
     email: EmailStr | None = None
     is_active: bool
-    position: str
+    position: PositionEnum
     address: str | None = None
 
 
@@ -33,10 +34,10 @@ class EmployeeUpdate(BaseModel):
     last_name: str | None = None
     dni: str | None = None
     ruc: str | None = None
-    gender: str | None = None
+    gender: GenderEnum | None = None
     birth_date: date | None = None
     phone_number: str | None = None
     email: EmailStr | None = None
     is_active: bool | None = None
-    position: str | None = None
+    position: PositionEnum | None = None
     address: str | None = None
