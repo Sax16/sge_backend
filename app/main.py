@@ -14,7 +14,12 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="API SGE",
+    version="0.1.0",
+    summary="API para el sistema de gestión escolar en Instituciones Educativas",
+    lifespan=lifespan
+    )
 
 setup_cors(app)
 

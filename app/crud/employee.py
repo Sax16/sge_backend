@@ -19,7 +19,7 @@ def get_employee(db: Session, employee_id: int) -> Employee | None:
 
 
 def get_employees(db: Session, skip: int = 0, limit: int = 100) -> Sequence[Employee]:
-    return db.query(Employee).offset(skip).limit(limit).all()
+    return db.query(Employee).order_by(Employee.id).offset(skip).limit(limit).all()
 
 
 def update_employee(
