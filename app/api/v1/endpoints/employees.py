@@ -16,7 +16,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/", response_model=EmployeeRead, status_code=status.HTTP_201_CREATED
+    "", response_model=EmployeeRead, status_code=status.HTTP_201_CREATED
 )
 def create_employee_endpoint(
     employee_in: EmployeeCreate, db: Session = Depends(get_db)
@@ -25,7 +25,7 @@ def create_employee_endpoint(
     return employee
 
 
-@router.get("/", response_model=list[EmployeeRead])
+@router.get("", response_model=list[EmployeeRead])
 def list_employees_endpoint(
     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ) -> list[EmployeeRead]:

@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     postgres_db: str = Field(..., env="POSTGRES_DB")
     postgres_host: str = Field("localhost", env="POSTGRES_HOST")
     postgres_port: int = Field(5432, env="POSTGRES_PORT")
+    cors_origins: list[str] = Field(
+        default=["http://localhost:4200"],
+        env="CORS_ORIGINS",
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",

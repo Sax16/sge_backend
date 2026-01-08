@@ -13,7 +13,7 @@ class User(Base):
     user_name = Column(String(25), nullable=False, unique=True, index=True)
     password = Column(String(255), nullable=False)
     is_active = Column(Boolean, nullable=False)
-    create_at = Column(DateTime(timezone=True), nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False)
     employee_id = Column(
         Integer,
         ForeignKey("employees.id", ondelete="RESTRICT"),
