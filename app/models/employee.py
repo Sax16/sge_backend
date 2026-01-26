@@ -11,7 +11,7 @@ class Employee(Base):
     Employee model representing company employees.
     
     Attributes:
-        id: Primary key, auto-incremented
+        id: Primary key, auto-incremented, unique identifier for the employee
         first_name: Employee's first name
         last_name: Employee's last name
         dni: National ID document (DNI), unique identifier
@@ -28,7 +28,7 @@ class Employee(Base):
     """
     __tablename__ = "employees"
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True, comment="Employee ID")
     first_name = Column(String(50), nullable=False, comment="Employee's first name")
     last_name = Column(String(50), nullable=False, comment="Employee's last name")
     dni = Column(String(15), nullable=False, unique=True, index=True, comment="National ID document (DNI)")
@@ -40,7 +40,7 @@ class Employee(Base):
     address = Column(String(75), comment="Physical address")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true", comment="Employment status flag")
     position = Column(Enum(PositionEnum), nullable=False, comment="Current position in company")
-    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), comment="Record creation timestamp")
+    created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Record creation timestamp")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 
     user = relationship("User", back_populates="employee", uselist=False)

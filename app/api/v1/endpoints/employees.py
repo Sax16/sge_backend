@@ -27,7 +27,7 @@ def create_employee(
 
 
 @router.get("", response_model=list[EmployeeRead], description="List all employees")
-def list_employees(
+def get_employees(
     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ) -> list[EmployeeRead]:
     employees = get_employees_crud(db, skip=skip, limit=limit)
