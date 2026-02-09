@@ -1,6 +1,6 @@
 from enum import Enum
 
-# Enum for gender
+
 class GenderEnum(str, Enum):
     MASCULINO = "Masculino"
     FEMENINO = "Femenino"
@@ -16,3 +16,8 @@ class PositionEnum(str, Enum):
     PROMOTOR = "Promotor"
     ADMINISTRATIVO = "Administrativo"
     OTRO = "Otro"
+
+
+class RoleEnum(str, Enum):
+    SUPER_ADMIN = "SUPER_ADMIN"
+    ADMIN = "ADMIN"

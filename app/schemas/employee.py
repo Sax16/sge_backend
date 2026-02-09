@@ -32,12 +32,5 @@ class EmployeeRead(EmployeeBase):
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
-class EmployeeUpdate(BaseModel):
-    first_name: str | None = Field(None, description="First name of the employee", alias="firstName")
-    last_name: str | None = Field(None, description="Last name of the employee", alias="lastName")
-    dni: str | None = Field(None, description="DNI of the employee")
-    gender: GenderEnum | None = Field(None, description="Gender of the employee")
-    is_active: bool | None = Field(None, description="Active status of the employee", alias="isActive")
-    position: PositionEnum | None = Field(None, description="Position of the employee")
-
-    model_config = ConfigDict(populate_by_name=True)
+class EmployeeUpdate(EmployeeBase):
+    pass

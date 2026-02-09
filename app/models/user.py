@@ -1,7 +1,8 @@
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy import func
 
+from app.core.enums import RoleEnum
 from app.models.base import Base
 
 
@@ -23,6 +24,7 @@ class User(Base):
     user_name = Column(String(25), nullable=False, unique=True, index=True, comment="Username of the user")
     password = Column(String(255), nullable=False, comment="Password of the user")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true", comment="Active status of the user")
+    role = Column(Enum(RoleEnum), nullable=False, default=RoleEnum.ADMIN, server_default=RoleEnum.ADMIN.value, comment="Role of the user")
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Creation timestamp of the user")
     employee_id = Column(
         Integer,
