@@ -12,6 +12,10 @@ class Settings(BaseSettings):
         default=["http://localhost:4200"],
         env="CORS_ORIGINS",
     )
+    secret_key: str = Field(
+        default="tu_super_secreto_para_desarrollo", 
+        env="SECRET_KEY"
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",
