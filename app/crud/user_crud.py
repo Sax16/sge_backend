@@ -18,6 +18,10 @@ def get_user_by_username(db: Session, user_name: str) -> User | None:
     return db.query(User).filter(User.user_name == user_name).first()
 
 
+def get_user_by_employee_id(db: Session, employee_id: int) -> User | None:
+    return db.query(User).filter(User.employee_id == employee_id).first()
+
+
 def create_user(db: Session, user_in: UserCreate) -> User:
     user = User(**user_in.model_dump())
     db.add(user)

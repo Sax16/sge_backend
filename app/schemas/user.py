@@ -9,22 +9,22 @@ class UserBase(BaseModel):
     user_name: str = Field(..., description="Username of the user", alias="userName")
     is_active: bool = Field(..., description="Active status of the user", alias="isActive")
     role: RoleEnum = Field(..., description="Role of the user")
-    employee_id: int = Field(..., description="ID of the associated employee", alias="employeeId")
-    password: str = Field(..., description="Password of the user")
 
     model_config = ConfigDict(populate_by_name=True)
 
 
 class UserCreate(UserBase):
-    pass
+    password: str = Field(..., description="Password of the user")
+    employee_id: int = Field(..., description="ID of the associated employee", alias="employeeId")
 
 
 class UserRead(UserBase):
     id: int = Field(..., description="ID of the user")
+    employee_id: int = Field(..., description="ID of the associated employee", alias="employeeId")
     created_at: datetime = Field(..., description="Creation timestamp of the user", alias="createdAt")
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
 class UserUpdate(UserBase):
-    pass
+    password: str | None = Field(None, description="Password of the user")
