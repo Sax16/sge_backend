@@ -1,18 +1,30 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from app.crud.employee import (
-    create_employee as create_employee_crud,
-    delete_employee as delete_employee_crud,
-    get_employee as get_employee_crud,
-    get_employees as get_employees_crud,
-    update_employee as update_employee_crud,
-)
+from app.services import employee_service
 from app.dependencies import get_db
 from app.schemas.employee import EmployeeCreate, EmployeeRead, EmployeeUpdate
 
 
 router = APIRouter()
+
+
+@router.get("/{employee_id}", response_model=EmployeeRead, description="Get an employee by ID")
+def get_employee(
+    employee_id: int, db: Session = Depends(get_db)
+) -> EmployeeRead:
+    employee = employee_service.get_employee(db, employee_id)
+    if employee is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
+    return employee
+
+
+@router.get("", response_model=list[EmployeeRead], description="List all employees")
+def get_employees(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+) -> list[EmployeeRead]:
+    employees = employee_service.get_employees(db, skip=skip, limit=limit)
+    return list(employees)
 
 
 @router.post(
@@ -22,25 +34,7 @@ router = APIRouter()
 def create_employee(
     employee_in: EmployeeCreate, db: Session = Depends(get_db)
 ) -> EmployeeRead:
-    employee = create_employee_crud(db, employee_in)
-    return employee
-
-
-@router.get("", response_model=list[EmployeeRead], description="List all employees")
-def get_employees(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-) -> list[EmployeeRead]:
-    employees = get_employees_crud(db, skip=skip, limit=limit)
-    return list(employees)
-
-
-@router.get("/{employee_id}", response_model=EmployeeRead, description="Get an employee by ID")
-def get_employee(
-    employee_id: int, db: Session = Depends(get_db)
-) -> EmployeeRead:
-    employee = get_employee_crud(db, employee_id)
-    if employee is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
+    employee = employee_service.create_employee(db, employee_in)
     return employee
 
 
@@ -48,10 +42,10 @@ def get_employee(
 def update_employee(
     employee_id: int, employee_in: EmployeeUpdate, db: Session = Depends(get_db)
 ) -> EmployeeRead:
-    employee = get_employee_crud(db, employee_id)
+    employee = employee_service.get_employee(db, employee_id)
     if employee is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
-    updated = update_employee_crud(db, employee, employee_in)
+    updated = employee_service.update_employee(db, employee, employee_in)
     return updated
 
 
@@ -59,8 +53,8 @@ def update_employee(
 def delete_employee(
     employee_id: int, db: Session = Depends(get_db)
 ) -> Response:
-    employee = get_employee_crud(db, employee_id)
+    employee = employee_service.get_employee(db, employee_id)
     if employee is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
-    delete_employee_crud(db, employee)
+    employee_service.delete_employee(db, employee)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
