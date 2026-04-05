@@ -18,6 +18,10 @@ def get_employee(db: Session, employee_id: int) -> Employee | None:
     return db.query(Employee).filter(Employee.id == employee_id).first()
 
 
+def get_employee_by_dni(db: Session, dni: str) -> Employee | None:
+    return db.query(Employee).filter(Employee.dni == dni).first()
+
+
 def get_employees(db: Session, skip: int = 0, limit: int = 100) -> Sequence[Employee]:
     return db.query(Employee).order_by(Employee.id).offset(skip).limit(limit).all()
 
