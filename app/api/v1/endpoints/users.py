@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 from app.services import user_service
-from app.dependencies import get_db
+from app.dependencies import get_db, check_super_admin
 from app.schemas.user import UserCreate, UserRead, UserUpdate
 
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(check_super_admin)])
 
 
 @router.get("/{user_id}", response_model=UserRead, description="Get a user by ID")

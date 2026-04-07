@@ -1,1 +1,13 @@
+from app.services.user_service import get_user_by_username
+from app.models.user import User
+from sqlalchemy.orm import Session
+from app.core.security import verify_password
  
+
+def authenticate_user(db: Session, user_name: str, password: str) -> User | None:
+    user = get_user_by_username(db, user_name)
+    if not user:
+        return None
+    if not verify_password(password, user.password):
+        return None
+    return user

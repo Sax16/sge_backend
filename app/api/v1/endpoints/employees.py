@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from app.services import employee_service
-from app.dependencies import get_db
+from app.dependencies import get_db, check_admin_or_super_admin
 from app.schemas.employee import EmployeeCreate, EmployeeRead, EmployeeUpdate
 
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(check_admin_or_super_admin)])
 
 
 @router.get("/{employee_id}", response_model=EmployeeRead, description="Get an employee by ID")
