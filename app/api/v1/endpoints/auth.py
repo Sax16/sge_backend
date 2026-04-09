@@ -15,12 +15,23 @@ async def login(
     db: Session = Depends(get_db),
 ):
     user = authenticate_user(db, form_data.username, form_data.password)
+    # Si el usuario no existe, lanzar una excepción
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Contraseña o usuario incorrecto!",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+    # Si el usuario no está activo, lanzar una excepción
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Este usuario esta deshabilitado!",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Crear el token de acceso
     access_token = create_access_token(data={"sub": user.user_name})
     return {"access_token": access_token, "token_type": "Bearer"}
 
