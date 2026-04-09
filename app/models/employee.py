@@ -1,4 +1,4 @@
-from app.core.enums import GenderEnum, PositionEnum
+from app.core.enums import Gender, EmployeePosition
 from sqlalchemy import Boolean, Column, Date, DateTime, Integer, String, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -33,13 +33,13 @@ class Employee(Base):
     last_name = Column(String(50), nullable=False, comment="Employee's last name")
     dni = Column(String(15), nullable=False, unique=True, index=True, comment="National ID document (DNI)")
     ruc = Column(String(15), unique=True, comment="Tax identification number (optional)")
-    gender = Column(Enum(GenderEnum), nullable=False, comment="Employee's gender")
+    gender = Column(Enum(Gender), nullable=False, comment="Employee's gender")
     birth_date = Column(Date, comment="Date of birth")
     phone_number = Column(String(15), comment="Contact phone number")
     email = Column(String(50), index=True, comment="Contact email address")
     address = Column(String(75), comment="Physical address")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true", comment="Employment status flag")
-    position = Column(Enum(PositionEnum), nullable=False, comment="Current position in company")
+    position = Column(Enum(EmployeePosition), nullable=False, comment="Current position in company")
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Record creation timestamp")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 

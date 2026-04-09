@@ -2,13 +2,13 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.core.enums import RoleEnum
+from app.core.enums import UserRole
 
 
 class UserBase(BaseModel):
     user_name: str = Field(..., description="Username of the user", alias="userName")
     is_active: bool = Field(..., description="Active status of the user", alias="isActive")
-    role: RoleEnum = Field(..., description="Role of the user")
+    role: UserRole = Field(..., description="Role of the user")
 
     model_config = ConfigDict(populate_by_name=True)
 

@@ -16,7 +16,7 @@ from app.models.user import User
 
 from jwt.exceptions import InvalidTokenError
 
-from app.core.enums import RoleEnum
+from app.core.enums import UserRole
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth")
 
@@ -53,7 +53,7 @@ async def get_current_user(
 def check_super_admin(
     current_user: User = Depends(get_current_user),
 ) -> User:
-    if current_user.role != RoleEnum.SUPER_ADMIN:
+    if current_user.role != UserRole.SUPER_ADMIN:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tienes permisos suficientes para realizar esta accion.",
@@ -64,7 +64,7 @@ def check_super_admin(
 def check_admin_or_super_admin(
     current_user: User = Depends(get_current_user),
 ) -> User:
-    if current_user.role not in [RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN]:
+    if current_user.role not in [UserRole.SUPER_ADMIN, UserRole.ADMIN]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tienes permisos suficientes para realizar esta accion.",

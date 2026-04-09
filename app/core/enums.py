@@ -1,12 +1,12 @@
 from enum import Enum
 
 
-class GenderEnum(str, Enum):
+class Gender(str, Enum):
     MASCULINO = "Masculino"
     FEMENINO = "Femenino"
 
 
-class PositionEnum(str, Enum):
+class EmployeePosition(str, Enum):
     DOCENTE = "Docente"
     AUXILIAR = "Auxiliar"
     SECRETARIA = "Secretaria"
@@ -18,6 +18,13 @@ class PositionEnum(str, Enum):
     OTRO = "Otro"
 
 
-class RoleEnum(str, Enum):
+class UserRole(str, Enum):
     SUPER_ADMIN = "SUPER_ADMIN"
     ADMIN = "ADMIN"
+
+
+class SectionType(str, Enum):
+    REGULAR = "Regular"
+    EXTRAORDINARIO = "Extraordinario"
+    OTRO = "Otro"
+    
