@@ -33,4 +33,18 @@ class AcademicPeriodType(str, Enum):
     REGULAR = "Regular"
     COMPLEMENTARIO = "Complementario"
     OTRO = "Otro"
-    
+
+
+class EconomicLevel(str, Enum):
+    PRIMERO = "Nivel I"
+    SEGUNDO = "Nivel II"
+    TERCERO = "Nivel III"
+    CUARTO = "Nivel IV"
+    QUINTO = "Nivel V"
+
+
+class StudentStatus(str, Enum):
+    ACTIVO = "Activo"
+    INACTIVO = "Inactivo"
+    RETIRADO = "Retirado"
+    EGRESADO = "Egresado"
