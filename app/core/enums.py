@@ -48,3 +48,10 @@ class StudentStatus(str, Enum):
     INACTIVO = "Inactivo"
     RETIRADO = "Retirado"
     EGRESADO = "Egresado"
+
+
+class ExpenseType(str, Enum):
+    ADMINISTRATIVO = "Administrativo"
+    ACADEMICO = "Académico"
+    SERVICIOS = "Servicios"
+    OTRO = "Otro"

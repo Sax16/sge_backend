@@ -36,3 +36,4 @@ class User(Base):
     )
 
     employee = relationship("Employee", back_populates="user")
+    expenses = relationship("Expense", back_populates="user")
