@@ -8,7 +8,7 @@ from app.models.base import Base
 
 class Section(Base):
     """
-    Section model representing a classroom section within a grade and level.
+    Section model representing a classroom section within a grade.
 
     Attributes:
         id (str): Primary key, alphanumeric code (e.g., '1A', '2B').
@@ -16,7 +16,6 @@ class Section(Base):
         tag (str): Short tag/abbreviation for the section, unique.
         type (SectionType): Type/modality of the section.
         grade_id (int): Foreign key referencing the associated grade.
-        level_id (int): Foreign key referencing the associated educational level.
         updated_at (datetime): Timestamp of the last update (auto-updated).
     """
     __tablename__ = "sections"
@@ -32,14 +31,6 @@ class Section(Base):
         index=True,
         comment="ID of the associated grade",
     )
-    level_id = Column(
-        SmallInteger,
-        ForeignKey("levels.id", ondelete="RESTRICT"),
-        nullable=False,
-        index=True,
-        comment="ID of the associated educational level",
-    )
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 
     grade = relationship("Grade", back_populates="sections")
-    level = relationship("Level", back_populates="sections")

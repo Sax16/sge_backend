@@ -13,6 +13,7 @@ class Level(Base):
         name (str): Full name of the educational level, must be unique.
         modular_code (str): Modular code assigned to the level, optional.
         tag (str): Short tag/abbreviation for the level, unique.
+        grades: List of grades belonging to this level.
     """
     __tablename__ = "levels"
 
@@ -21,4 +22,4 @@ class Level(Base):
     modular_code = Column(String(20), unique=True, comment="Modular code for the level")
     tag = Column(String(10), unique=True, nullable=False, comment="Short tag/abbreviation for the level")
 
-    sections = relationship("Section", back_populates="level")
+    grades = relationship("Grade", back_populates="level")
