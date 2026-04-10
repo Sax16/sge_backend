@@ -21,7 +21,7 @@ class AcademicPeriod(Base):
         updated_at (datetime): Timestamp of the last update (auto-updated).
         type (AcademicPeriodType): Type of the academic period (enum).
     """
-    __tablename__ = "academic_periods"
+    __tablename__ = "academic_period"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, comment="Academic period ID")
     name = Column(String(25), nullable=False, unique=True, index=True, comment="Name of the academic period")
@@ -29,6 +29,6 @@ class AcademicPeriod(Base):
     end_date = Column(Date, nullable=False, comment="End date of the academic period")
     is_active = Column(Boolean, nullable=False, default=False, server_default="false", comment="Active status of the academic period")
     year = Column(SmallInteger, nullable=False, comment="Year of the academic period")
+    type = Column(Enum(AcademicPeriodType), nullable=False, comment="Type of the academic period")
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Record creation timestamp")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
-    type = Column(Enum(AcademicPeriodType), nullable=False, comment="Type of the academic period")

@@ -26,7 +26,7 @@ class Student(Base):
         economic_level (EconomicLevel): Socioeconomic level classification (enum).
         created_at (datetime): Timestamp when the record was created.
     """
-    __tablename__ = "students"
+    __tablename__ = "student"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, comment="Student ID")
     paternal_surname = Column(String(75), nullable=False, comment="Student's paternal surname")
@@ -43,3 +43,4 @@ class Student(Base):
     status = Column(Enum(StudentStatus), nullable=False, comment="Enrollment status of the student")
     economic_level = Column(Enum(EconomicLevel), nullable=False, comment="Socioeconomic level classification")
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Record creation timestamp")
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Record update timestamp")

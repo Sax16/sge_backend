@@ -1,3 +1,4 @@
+from sqlalchemy import SmallInteger
 from sqlalchemy import Column, Date, DateTime, Enum, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -21,7 +22,7 @@ class Expense(Base):
         created_at (datetime): Timestamp when the record was created.
         updated_at (datetime): Timestamp of the last update.
     """
-    __tablename__ = "expenses"
+    __tablename__ = "expense"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, comment="Expense ID")
     name = Column(String(100), nullable=False, comment="Short description or name of the expense")
@@ -30,8 +31,8 @@ class Expense(Base):
     expense_type = Column(Enum(ExpenseType), nullable=False, comment="Type/Category of the expense")
     details = Column(String(255), comment="Additional details or long description")
     user_id = Column(
-        Integer,
-        ForeignKey("users.id", ondelete="RESTRICT"),
+        SmallInteger,
+        ForeignKey("user.id", ondelete="RESTRICT"),
         nullable=False,
         index=True,
         comment="ID of the user who registered the expense",

@@ -15,7 +15,7 @@ class Level(Base):
         tag (str): Short tag/abbreviation for the level, unique.
         grades: List of grades belonging to this level.
     """
-    __tablename__ = "levels"
+    __tablename__ = "level"
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="Level ID")
     name = Column(String(25), nullable=False, unique=True, index=True, comment="Name of the educational level")

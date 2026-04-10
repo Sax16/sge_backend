@@ -1,4 +1,5 @@
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Enum
+from sqlalchemy import SmallInteger
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy import func
 
@@ -18,17 +19,17 @@ class User(Base):
         created_at (datetime): Timestamp when the user account was created.
         employee_id (int): Foreign key to the associated employee record.
     """
-    __tablename__ = "users"
+    __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True, comment="User ID")
+    id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="User ID")
     user_name = Column(String(25), nullable=False, unique=True, index=True, comment="Username of the user")
     password = Column(String(255), nullable=False, comment="Password of the user")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true", comment="Active status of the user")
     role = Column(Enum(UserRole), nullable=False, default=UserRole.ADMIN, server_default=UserRole.ADMIN.value, comment="Role of the user")
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Creation timestamp of the user")
     employee_id = Column(
-        Integer,
-        ForeignKey("employees.id", ondelete="RESTRICT"),
+        SmallInteger,
+        ForeignKey("employee.id", ondelete="RESTRICT"),
         nullable=False,
         unique=True,
         index=True,

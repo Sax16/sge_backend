@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, SmallInteger, String
+from sqlalchemy import Column, DateTime, ForeignKey, SmallInteger, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -26,7 +26,7 @@ class School(Base):
         created_at (datetime): Timestamp when the record was created.
         updated_at (datetime): Timestamp of the last update.
     """
-    __tablename__ = "schools"
+    __tablename__ = "school"
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="School ID")
     company_name = Column(String(255), nullable=False, comment="Commercial name of the school")
@@ -35,23 +35,23 @@ class School(Base):
     address = Column(String(150), nullable=False, comment="Physical address of the school")
     email = Column(String(50), nullable=False, comment="Institutional contact email")
     phone_number = Column(String(15), nullable=False, comment="Institutional contact phone number")
-    logo_path = Column(String, comment="File path or URL to the school's logo")
+    logo_path = Column(String(255), comment="File path or URL to the school's logo")
     ruc = Column(String(15), nullable=False, comment="Tax identification number (RUC)")
     dre = Column(String(50), comment="Regional Education Directorate (DRE)")
     ugel = Column(String(50), comment="Local Education Management Unit (UGEL)")
     headmaster_id = Column(
-        Integer,
-        ForeignKey("employees.id", ondelete="RESTRICT"),
+        SmallInteger,
+        ForeignKey("employee.id", ondelete="RESTRICT"),
         nullable=False,
         comment="ID of the headmaster (Employee)",
     )
     deputy_director_id = Column(
-        Integer,
-        ForeignKey("employees.id", ondelete="RESTRICT"),
+        SmallInteger,
+        ForeignKey("employee.id", ondelete="RESTRICT"),
         comment="ID of the deputy director (Employee)",
     )
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Record creation timestamp")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 
-    headmaster = relationship("Employee", foreign_keys=[headmaster_id])
-    deputy_director = relationship("Employee", foreign_keys=[deputy_director_id])
+    headmaster = relationship("Employee", foreign_keys=[headmaster_id], back_populates="school_as_headmaster")
+    deputy_director = relationship("Employee", foreign_keys=[deputy_director_id], back_populates="school_as_deputy_director")

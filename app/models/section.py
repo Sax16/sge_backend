@@ -18,7 +18,7 @@ class Section(Base):
         grade_id (int): Foreign key referencing the associated grade.
         updated_at (datetime): Timestamp of the last update (auto-updated).
     """
-    __tablename__ = "sections"
+    __tablename__ = "section"
 
     id = Column(String(6), primary_key=True, comment="Section code (e.g., '1A', '2B')")
     name = Column(String(25), nullable=False, unique=True, index=True, comment="Name of the section")
@@ -26,7 +26,7 @@ class Section(Base):
     type = Column(Enum(SectionType), nullable=False, comment="Type or modality of the section")
     grade_id = Column(
         SmallInteger,
-        ForeignKey("grades.id", ondelete="RESTRICT"),
+        ForeignKey("grade.id", ondelete="RESTRICT"),
         nullable=False,
         index=True,
         comment="ID of the associated grade",
