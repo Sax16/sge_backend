@@ -27,4 +27,10 @@ class SectionType(str, Enum):
     REGULAR = "Regular"
     EXTRAORDINARIO = "Extraordinario"
     OTRO = "Otro"
+
+
+class AcademicPeriodType(str, Enum):
+    REGULAR = "Regular"
+    COMPLEMENTARIO = "Complementario"
+    OTRO = "Otro"
     

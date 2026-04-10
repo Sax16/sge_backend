@@ -1,4 +1,5 @@
 from app.models.base import Base
+from app.models.academic_period import AcademicPeriod
 from app.models.employee import Employee
 from app.models.grade import Grade
 from app.models.level import Level
