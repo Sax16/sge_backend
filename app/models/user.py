@@ -13,7 +13,7 @@ class User(Base):
 
     Attributes:
         id (int): Primary key, unique identifier for the user.
-        user_name (str): Unique username for the user, used for login.
+        username (str): Unique username for the user, used for login.
         password (str): Hashed password for user authentication.
         is_active (bool): Flag to indicate if the user account is active.
         created_at (datetime): Timestamp when the user account was created.
@@ -22,7 +22,7 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="User ID")
-    user_name = Column(String(25), nullable=False, unique=True, index=True, comment="Username of the user")
+    username = Column(String(25), nullable=False, unique=True, index=True, comment="Username of the user")
     password = Column(String(255), nullable=False, comment="Password of the user")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true", comment="Active status of the user")
     role = Column(Enum(UserRole), nullable=False, default=UserRole.ADMIN, server_default=UserRole.ADMIN.value, comment="Role of the user")

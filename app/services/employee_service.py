@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 from app.models.employee import Employee
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate

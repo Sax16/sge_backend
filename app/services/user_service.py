@@ -17,13 +17,13 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> Sequence[User]:
     return user_crud.get_users(db, skip=skip, limit=limit)
 
 
-def get_user_by_username(db: Session, user_name: str) -> User | None:
-    return user_crud.get_user_by_username(db, user_name)
+def get_user_by_username(db: Session, username: str) -> User | None:
+    return user_crud.get_user_by_username(db, username)
 
 
 def create_user(db: Session, user: UserCreate) -> User:
     # Validate that the username does not exist
-    existing_user = user_crud.get_user_by_username(db, user.user_name)
+    existing_user = user_crud.get_user_by_username(db, user.username)
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
 
@@ -45,7 +45,7 @@ def create_user(db: Session, user: UserCreate) -> User:
 
 def update_user(db: Session, user: User, user_in: UserUpdate) -> User:
     # Validate that if the username exists, it's the same user
-    existing_user = user_crud.get_user_by_username(db, user_in.user_name)
+    existing_user = user_crud.get_user_by_username(db, user_in.username)
     if existing_user and existing_user.id != user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
 

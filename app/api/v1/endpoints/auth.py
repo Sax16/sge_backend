@@ -32,7 +32,7 @@ async def login(
         )
     
     # Crear el token de acceso
-    access_token = create_access_token(data={"sub": user.user_name})
+    access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "Bearer"}
 
 

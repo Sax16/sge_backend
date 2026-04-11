@@ -14,8 +14,8 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> Sequence[User]:
     return db.query(User).order_by(User.id).offset(skip).limit(limit).all()
 
 
-def get_user_by_username(db: Session, user_name: str) -> User | None:
-    return db.query(User).filter(User.user_name == user_name).first()
+def get_user_by_username(db: Session, username: str) -> User | None:
+    return db.query(User).filter(User.username == username).first()
 
 
 def get_user_by_employee_id(db: Session, employee_id: int) -> User | None:

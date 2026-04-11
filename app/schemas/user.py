@@ -6,7 +6,7 @@ from app.core.enums import UserRole
 
 
 class UserBase(BaseModel):
-    user_name: str = Field(..., description="Username of the user", alias="userName")
+    username: str = Field(..., description="Username of the user")
     is_active: bool = Field(..., description="Active status of the user", alias="isActive")
     role: UserRole = Field(..., description="Role of the user")
 
