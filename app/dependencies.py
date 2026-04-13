@@ -18,7 +18,7 @@ from jwt.exceptions import InvalidTokenError
 
 from app.core.enums import UserRole
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 def get_db() -> Generator[Session, None, None]:
