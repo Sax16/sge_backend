@@ -56,5 +56,10 @@ def delete_employee(
     employee = employee_service.get_employee(db, employee_id)
     if employee is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
-    employee_service.delete_employee(db, employee)
+
+    try:
+        employee_service.delete_employee(db, employee)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
     return Response(status_code=status.HTTP_204_NO_CONTENT)

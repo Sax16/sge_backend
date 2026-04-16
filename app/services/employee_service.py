@@ -20,7 +20,7 @@ def create_employee(db: Session, employee: EmployeeCreate) -> Employee:
     # verificar si el empleado ya existe
     existing_employee = employee_crud.get_employee_by_dni(db, employee.dni)
     if existing_employee:
-        raise HTTPException(status_code=400, detail="There is an employee with the same DNI")
+        raise HTTPException(status_code=400, detail="Ya existe un empleado con el mismo DNI")
 
     # TODO: Implementar reglas de negocio
     
@@ -28,6 +28,13 @@ def create_employee(db: Session, employee: EmployeeCreate) -> Employee:
 
 
 def update_employee(db: Session, employee: Employee, employee_in: EmployeeUpdate) -> Employee:
+    # verificar si el empleado ya existe
+    existing_employee = employee_crud.get_employee_by_dni(db, employee_in.dni)
+    if existing_employee and existing_employee.id != employee.id:
+        raise HTTPException(status_code=400, detail="Ya existe un empleado con el mismo DNI")
+
+    # TODO: Implementar reglas de negocio
+    
     return employee_crud.update_employee(db, employee, employee_in)
 
 
