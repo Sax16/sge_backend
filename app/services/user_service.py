@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 from app.core.security import get_password_hash
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from app.crud import user_crud, employee_crud
+from app.services import employee_service
+from app.crud import user_crud
 
 
 def get_user(db: Session, user_id: int) -> User | None:
@@ -28,9 +29,13 @@ def create_user(db: Session, user: UserCreate) -> User:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
 
     # Validate that the employee exists
-    existing_employee = employee_crud.get_employee(db, user.employee_id)
+    existing_employee = employee_service.get_employee(db, user.employee_id)
     if existing_employee is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
+
+    # Validate that the employee is active
+    if not existing_employee.is_active:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Employee is not active")
 
     # Validate that the employee is not already assigned to a user
     existing_user = user_crud.get_user_by_employee_id(db, user.employee_id)
