@@ -36,15 +36,18 @@ def create_expense(
     return expense
 
 
-@router.put("/{expense_id}", response_model=ExpenseRead, description="Update an expense by ID")
+@router.put(
+    "/{expense_id}", status_code=status.HTTP_204_NO_CONTENT,
+    description="Update an expense by ID"
+)
 def update_expense(
     expense_id: int, expense_in: ExpenseUpdate, db: Session = Depends(get_db)
-) -> ExpenseRead:
+) -> Response:
     expense = expense_service.get_expense(db, expense_id)
     if expense is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Expense not found")
-    updated = expense_service.update_expense(db, expense, expense_in)
-    return updated
+    expense_service.update_expense(db, expense, expense_in)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.delete("/{expense_id}", status_code=status.HTTP_204_NO_CONTENT, description="Delete an expense by ID")

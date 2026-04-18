@@ -38,15 +38,18 @@ def create_employee(
     return employee
 
 
-@router.put("/{employee_id}", response_model=EmployeeRead, description="Update an employee by ID")
+@router.put(
+    "/{employee_id}", status_code=status.HTTP_204_NO_CONTENT,
+    description="Update an employee by ID"
+)
 def update_employee(
     employee_id: int, employee_in: EmployeeUpdate, db: Session = Depends(get_db)
-) -> EmployeeRead:
+) -> Response:
     employee = employee_service.get_employee(db, employee_id)
     if employee is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
-    updated = employee_service.update_employee(db, employee, employee_in)
-    return updated
+    employee_service.update_employee(db, employee, employee_in)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.delete("/{employee_id}", status_code=status.HTTP_204_NO_CONTENT, description="Delete an employee by ID")

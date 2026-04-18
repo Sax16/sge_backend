@@ -34,15 +34,18 @@ def create_user(
     return user
 
 
-@router.put("/{user_id}", response_model=UserRead, description="Update a user by ID")
+@router.put(
+    "/{user_id}", status_code=status.HTTP_204_NO_CONTENT,
+    description="Update a user by ID"
+)
 def update_user(
     user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)
-) -> UserRead:
+) -> Response:
     user = user_service.get_user(db, user_id)
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    updated = user_service.update_user(db, user, user_in)
-    return updated
+    user_service.update_user(db, user, user_in)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT, description="Delete a user by ID")
