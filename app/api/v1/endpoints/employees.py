@@ -62,7 +62,7 @@ def delete_employee(
 
     try:
         employee_service.delete_employee(db, employee)
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No se puede eliminar el empleado porque tiene registros relacionados.")
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

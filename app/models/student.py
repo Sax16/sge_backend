@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Date, DateTime, Enum, Integer, String
+from sqlalchemy import Column, Date, DateTime, Enum, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from app.core.enums import EconomicLevel, StudentStatus, Gender
+from app.core.enums import StudentStatus, Gender
 from app.models.base import Base
 
 
@@ -41,6 +42,9 @@ class Student(Base):
     level = Column(String(25), nullable=False, comment="Educational level name")
     grade = Column(String(25), nullable=False, comment="Grade name")
     status = Column(Enum(StudentStatus), nullable=False, comment="Enrollment status of the student")
-    economic_level = Column(Enum(EconomicLevel), nullable=False, comment="Socioeconomic level classification")
+    economic_level_id = Column(Integer, ForeignKey("economic_level.id"), nullable=False, index=True, comment="Economic level ID")
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Record creation timestamp")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Record update timestamp")
+
+    guardians = relationship("GuardianStudent", back_populates="student")
+    economic_level = relationship("EconomicLevel", back_populates="students")

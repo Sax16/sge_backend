@@ -7,4 +7,12 @@ from app.models.level import Level
 from app.models.school import School
 from app.models.section import Section
 from app.models.student import Student
+from app.models.guardian import Guardian
+from app.models.guardian_student import GuardianStudent
+from app.models.economic_level import EconomicLevel
+from app.models.charge_catalog import ChargeCatalog
+from app.models.charge_catalog_amount import ChargeCatalogAmount
+from app.models.payment_scheme import PaymentScheme
+from app.models.payment_schedule import PaymentSchedule
 from app.models.user import User
+

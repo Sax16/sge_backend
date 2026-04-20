@@ -35,14 +35,6 @@ class AcademicPeriodType(str, Enum):
     OTRO = "Otro"
 
 
-class EconomicLevel(str, Enum):
-    PRIMERO = "Nivel I"
-    SEGUNDO = "Nivel II"
-    TERCERO = "Nivel III"
-    CUARTO = "Nivel IV"
-    QUINTO = "Nivel V"
-
-
 class StudentStatus(str, Enum):
     ACTIVO = "Activo"
     INACTIVO = "Inactivo"
@@ -74,4 +66,17 @@ class Ugel(str, Enum):
     MAZAMARI = "Mazamari"
     HUANCAYO = "Huancayo"
     PANGOA = "Pangoa"
+    OTRO = "Otro"
+
+class RelationshipType(str, Enum):
+    PADRE = "Padre"
+    MADRE = "Madre"
+    TIO = "Tio"
+    TIA = "Tia"
+    ABUELO = "Abuelo"
+    ABUELA = "Abuela"
+    HERMANO = "Hermano"
+    HERMANA = "Hermana"
+    TUTOR = "Tutor"
+    APODERADO = "Apoderado"
     OTRO = "Otro"
