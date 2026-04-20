@@ -55,3 +55,23 @@ class ExpenseType(str, Enum):
     ACADEMICO = "Académico"
     SERVICIOS = "Servicios"
     OTRO = "Otro"
+
+
+class ManagementType(str, Enum):
+    PRIVADO = "Privada"
+    PUBLICO = "Pública"
+    OTRO = "Otro"
+
+
+class Ugel(str, Enum):
+    SATIPO = "Satipo"
+    RIO_TAMBO = "Rio Tambo"
+    RIO_NEGRO = "Rio Negro"
+    LA_MERCED = "La Merced"
+    CONCEPCION = "Concepcion"
+    JAUJA = "Jauja"
+    PICHANAKI = "Pichanaki"
+    MAZAMARI = "Mazamari"
+    HUANCAYO = "Huancayo"
+    PANGOA = "Pangoa"
+    OTRO = "Otro"
