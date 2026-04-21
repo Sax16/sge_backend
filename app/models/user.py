@@ -42,3 +42,8 @@ class User(Base):
     charges = relationship("Charge", back_populates="user")
     receipts = relationship("Receipt", back_populates="user")
     employee_payments = relationship("PaymentEmployee", back_populates="user")
+
+    @property
+    def employee_name(self) -> str | None:
+        """Returns the full name of the associated employee."""
+        return f"{self.employee.first_name} {self.employee.last_name}" if self.employee else None

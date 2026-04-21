@@ -21,6 +21,7 @@ class UserCreate(UserBase):
 class UserRead(UserBase):
     id: int = Field(..., description="ID of the user")
     employee_id: int = Field(..., description="ID of the associated employee", alias="employeeId")
+    employee_name: str | None = Field(None, description="Full name of the associated employee", alias="employeeName")
     created_at: datetime = Field(..., description="Creation timestamp of the user", alias="createdAt")
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)

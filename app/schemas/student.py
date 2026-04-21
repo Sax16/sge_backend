@@ -10,7 +10,7 @@ class StudentBase(BaseModel):
     maternal_surname: str = Field(..., description="Student's maternal surname", alias="maternalSurname")
     name: str = Field(..., description="Student's first and middle name(s)")
     dni: str = Field(..., description="National ID document (DNI)")
-    gender: Gender | None = Field(None, description="Student's gender")
+    gender: Gender = Field(..., description="Student's gender")
     birth_date: dateType | None = Field(None, description="Date of birth", alias="birthDate")
     address: str | None = Field(None, description="Physical address")
     phone_number: str | None = Field(None, description="Contact phone number", alias="phoneNumber")
@@ -29,6 +29,7 @@ class StudentCreate(StudentBase):
 
 class StudentRead(StudentBase):
     id: int = Field(..., description="Student ID")
+    economic_level_name: str | None = Field(None, description="Economic level name", alias="economicLevelName")
     created_at: datetime = Field(..., description="Record creation timestamp", alias="createdAt")
     updated_at: datetime = Field(..., description="Record update timestamp", alias="updatedAt")
 

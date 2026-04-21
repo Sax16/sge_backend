@@ -34,7 +34,7 @@ class Student(Base):
     maternal_surname = Column(String(75), nullable=False, comment="Student's maternal surname")
     name = Column(String(150), nullable=False, comment="Student's first and middle name(s)")
     dni = Column(String(12), nullable=False, unique=True, index=True, comment="National ID document (DNI)")
-    gender = Column(Enum(Gender), comment="Student's gender")
+    gender = Column(Enum(Gender), nullable=False, comment="Student's gender")
     birth_date = Column(Date, comment="Date of birth")
     address = Column(String(150), comment="Physical address")
     phone_number = Column(String(15), comment="Contact phone number")
@@ -50,3 +50,8 @@ class Student(Base):
     economic_level = relationship("EconomicLevel", back_populates="students")
     enrollments = relationship("Enrollment", back_populates="student")
     charges = relationship("Charge", back_populates="student")
+
+    @property
+    def economic_level_name(self) -> str | None:
+        """Returns the name of the associated economic level."""
+        return self.economic_level.name if self.economic_level else None
