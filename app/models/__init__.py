@@ -18,5 +18,8 @@ from app.models.enrollment import Enrollment
 from app.models.charge import Charge
 from app.models.discount import Discount
 from app.models.charge_discount import ChargeDiscount
+from app.models.receipt import Receipt
+from app.models.receipt_line import ReceiptLine
+from app.models.payment_employee import PaymentEmployee
 from app.models.user import User
 

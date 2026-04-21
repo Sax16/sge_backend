@@ -28,3 +28,4 @@ class Charge(Base):
     student = relationship("Student", back_populates="charges")
     charge_discounts = relationship("ChargeDiscount", back_populates="charge")
     user = relationship("User", back_populates="charges")
+    receipt_lines = relationship("ReceiptLine", back_populates="charge")

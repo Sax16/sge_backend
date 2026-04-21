@@ -37,3 +37,4 @@ class Guardian(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 
     students = relationship("GuardianStudent", back_populates="guardian")
+    receipts = relationship("Receipt", back_populates="guardian")

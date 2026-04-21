@@ -46,3 +46,4 @@ class Employee(Base):
     user = relationship("User", back_populates="employee", uselist=False)
     school_as_headmaster = relationship("School", foreign_keys="[School.headmaster_id]", back_populates="headmaster")
     school_as_deputy_director = relationship("School", foreign_keys="[School.deputy_director_id]", back_populates="deputy_director")
+    payments_received = relationship("PaymentEmployee", back_populates="employee")

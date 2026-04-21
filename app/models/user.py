@@ -40,3 +40,5 @@ class User(Base):
     expenses = relationship("Expense", back_populates="user")
     enrollments = relationship("Enrollment", back_populates="user")
     charges = relationship("Charge", back_populates="user")
+    receipts = relationship("Receipt", back_populates="user")
+    employee_payments = relationship("PaymentEmployee", back_populates="user")
