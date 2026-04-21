@@ -23,7 +23,6 @@ class Section(Base):
     id = Column(String(6), primary_key=True, comment="Section code (e.g., '1A', '2B')")
     name = Column(String(25), nullable=False, unique=True, index=True, comment="Name of the section")
     tag = Column(String(10), unique=True, nullable=False, comment="Short tag/abbreviation for the section")
-    type = Column(Enum(SectionType), nullable=False, comment="Type or modality of the section")
     grade_id = Column(
         SmallInteger,
         ForeignKey("grade.id", ondelete="RESTRICT"),

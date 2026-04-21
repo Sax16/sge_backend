@@ -23,10 +23,9 @@ class UserRole(str, Enum):
     ADMIN = "ADMIN"
 
 
-class SectionType(str, Enum):
+class LevelAcademicType(str, Enum):
     REGULAR = "Regular"
     EXTRAORDINARIO = "Extraordinario"
-    OTRO = "Otro"
 
 
 class AcademicPeriodType(str, Enum):
