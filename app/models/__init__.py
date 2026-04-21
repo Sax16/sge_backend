@@ -14,5 +14,9 @@ from app.models.charge_catalog import ChargeCatalog
 from app.models.charge_catalog_amount import ChargeCatalogAmount
 from app.models.payment_scheme import PaymentScheme
 from app.models.payment_schedule import PaymentSchedule
+from app.models.enrollment import Enrollment
+from app.models.charge import Charge
+from app.models.discount import Discount
+from app.models.charge_discount import ChargeDiscount
 from app.models.user import User
 

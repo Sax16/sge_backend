@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, Date, DateTime, Enum, Integer, SmallInteger, String
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.core.enums import AcademicPeriodType
@@ -32,3 +33,5 @@ class AcademicPeriod(Base):
     type = Column(Enum(AcademicPeriodType), nullable=False, comment="Type of the academic period")
     created_at = Column(DateTime(timezone=True), nullable=False, default=func.now(), server_default=func.now(), comment="Record creation timestamp")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
+
+    enrollments = relationship("Enrollment", back_populates="academic_period")

@@ -16,3 +16,4 @@ class ChargeCatalog(Base):
 
     amounts = relationship("ChargeCatalogAmount", back_populates="charge_catalog")
     payment_schedules = relationship("PaymentSchedule", back_populates="charge_catalog")
+    charges = relationship("Charge", back_populates="charge_catalog")

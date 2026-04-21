@@ -80,3 +80,30 @@ class RelationshipType(str, Enum):
     TUTOR = "Tutor"
     APODERADO = "Apoderado"
     OTRO = "Otro"
+
+class EnrollmentStatus(str, Enum):
+    ACTIVO = "Activo"
+    PENDIENTE = "Pendiente"
+    RESERVADO = "Reservado"
+    FINALIZADO = "Finalizado"
+    RETIRADO = "Retirado"
+
+class ChargeStatus(str, Enum):
+    PENDIENTE = "Pendiente"
+    PAGADO = "Pagado"
+    VENCIDO = "Vencido"
+    ANULADO = "Anulado"
+    PARCIAL = "Parcial"
+
+class ReceiptType(str, Enum):
+    BOLETA = "Boleta"
+    FACTURA = "Factura"
+    OTRO = "Otro"
+
+class PaymentMethod(str, Enum):
+    EFECTIVO = "Efectivo"
+    TARJETA = "Tarjeta"
+    TRANSFERENCIA = "Transferencia"
+    OTRO = "Otro"
+
+    

@@ -34,3 +34,4 @@ class Section(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 
     grade = relationship("Grade", back_populates="sections")
+    enrollments = relationship("Enrollment", back_populates="section")

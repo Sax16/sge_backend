@@ -17,3 +17,4 @@ class PaymentScheme(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 
     payment_schedules = relationship("PaymentSchedule", back_populates="payment_scheme")
+    enrollments = relationship("Enrollment", back_populates="payment_scheme")

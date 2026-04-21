@@ -48,3 +48,5 @@ class Student(Base):
 
     guardians = relationship("GuardianStudent", back_populates="student")
     economic_level = relationship("EconomicLevel", back_populates="students")
+    enrollments = relationship("Enrollment", back_populates="student")
+    charges = relationship("Charge", back_populates="student")
