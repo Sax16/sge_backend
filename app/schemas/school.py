@@ -32,4 +32,15 @@ class SchoolRead(SchoolBase):
 
 
 class SchoolUpdate(SchoolBase):
-    pass
+    company_name: str | None = Field(None, description="Commercial name of the school", alias="companyName")
+    business_name: str | None = Field(None, description="Legal business name of the institution", alias="businessName")
+    management: str | None = Field(None, description="Name of the management or administrative unit")
+    address: str | None = Field(None, description="Physical address of the school")
+    email: EmailStr | None = Field(None, description="Institutional contact email")
+    phone_number: str | None = Field(None, description="Institutional contact phone number", alias="phoneNumber")
+    logo_path: str | None = Field(None, description="File path or URL to the school's logo", alias="logoPath")
+    ruc: str | None = Field(None, description="Tax identification number (RUC)")
+    dre: str | None = Field(None, description="Regional Education Directorate (DRE)")
+    ugel: str | None = Field(None, description="Local Education Management Unit (UGEL)")
+    headmaster_id: int | None = Field(None, description="ID of the headmaster (Employee)", alias="headmasterId")
+    deputy_director_id: int | None = Field(None, description="ID of the deputy director (Employee)", alias="deputyDirectorId")

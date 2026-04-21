@@ -27,4 +27,7 @@ class UserRead(UserBase):
 
 
 class UserUpdate(UserBase):
+    username: str | None = Field(None, description="Username of the user")
+    is_active: bool | None = Field(None, description="Active status of the user", alias="isActive")
+    role: UserRole | None = Field(None, description="Role of the user")
     password: str | None = Field(None, description="Password of the user")
