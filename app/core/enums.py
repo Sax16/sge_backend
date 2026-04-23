@@ -25,7 +25,7 @@ class UserRole(str, Enum):
 
 class LevelAcademicType(str, Enum):
     REGULAR = "Regular"
-    EXTRAORDINARIO = "Extraordinario"
+    EXTRAORDINARIA = "Extraordinaria"
 
 
 class AcademicPeriodType(str, Enum):

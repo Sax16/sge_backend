@@ -1,8 +1,6 @@
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, SmallInteger, String
-from sqlalchemy.sql import func
+from sqlalchemy import Column, ForeignKey, SmallInteger, String
 from sqlalchemy.orm import relationship
 
-from app.core.enums import SectionType
 from app.models.base import Base
 
 
@@ -14,9 +12,7 @@ class Section(Base):
         id (str): Primary key, alphanumeric code (e.g., '1A', '2B').
         name (str): Full name of the section, must be unique.
         tag (str): Short tag/abbreviation for the section, unique.
-        type (SectionType): Type/modality of the section.
         grade_id (int): Foreign key referencing the associated grade.
-        updated_at (datetime): Timestamp of the last update (auto-updated).
     """
     __tablename__ = "section"
 
@@ -30,7 +26,6 @@ class Section(Base):
         index=True,
         comment="ID of the associated grade",
     )
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="Last update timestamp")
 
     grade = relationship("Grade", back_populates="sections")
     enrollments = relationship("Enrollment", back_populates="section")

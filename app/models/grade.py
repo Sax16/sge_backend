@@ -10,7 +10,7 @@ class Grade(Base):
 
     Attributes:
         id (int): Primary key, auto-incremented unique identifier.
-        name (str): Full name of the grade, must be unique.
+        name (str): Full name of the grade.
         tag (str): Short tag/abbreviation for the grade, unique.
         level_id (int): Foreign key referencing the associated educational level.
         sections: List of sections belonging to this grade.
@@ -18,7 +18,7 @@ class Grade(Base):
     __tablename__ = "grade"
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="Grade ID")
-    name = Column(String(25), nullable=False, unique=True, index=True, comment="Name of the academic grade")
+    name = Column(String(25), nullable=False, index=True, comment="Name of the academic grade")
     tag = Column(String(10), unique=True, nullable=False, comment="Short tag/abbreviation for the grade")
     level_id = Column(
         SmallInteger,

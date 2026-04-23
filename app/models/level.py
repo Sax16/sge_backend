@@ -1,8 +1,8 @@
-from app.core.enums import LevelAcademicType
-from sqlalchemy import Column, SmallInteger, String
+from sqlalchemy import Column, Enum, SmallInteger, String
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
+from app.core.enums import LevelAcademicType
 
 
 class Level(Base):
