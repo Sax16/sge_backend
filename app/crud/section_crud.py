@@ -1,13 +1,22 @@
 from collections.abc import Sequence
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.models.section import Section
 from app.schemas.section import SectionCreate, SectionUpdate
 
 
-def create_section(db: Session, section_in: SectionCreate) -> Section:
-    section = Section(**section_in.model_dump())
+def get_max_id_by_prefix(db: Session, prefix: str) -> str | None:
+    """Return the highest section ID matching the given prefix, or None if no match exists."""
+    return db.query(func.max(Section.id)).filter(
+        Section.id.like(f"{prefix}-%")
+    ).scalar()
+
+
+def create_section(db: Session, section_id: str, section_in: SectionCreate) -> Section:
+    """Persist a new section with the given pre-generated ID."""
+    section = Section(id=section_id, **section_in.model_dump())
     db.add(section)
     db.commit()
     db.refresh(section)
