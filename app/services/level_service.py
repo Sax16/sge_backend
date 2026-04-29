@@ -1,3 +1,4 @@
+from app.core.enums import LevelAcademicType
 from collections.abc import Sequence
 from fastapi import HTTPException
 
@@ -17,12 +18,37 @@ def get_levels(db: Session, skip: int = 0, limit: int = 100) -> Sequence[Level]:
 
 
 def create_level(db: Session, level: LevelCreate) -> Level:
+    # Solo se permite crear niveles de tipo Extraordinaria
+    if not _is_extraordinary_level(level):
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Solo se permite crear niveles de tipo {LevelAcademicType.EXTRAORDINARIA.value}"
+        )
+
     return level_crud.create_level(db, level)
 
 
 def update_level(db: Session, level: Level, level_in: LevelUpdate) -> Level:
+    # Solo se permite actualizar el tipo de nivel a Extraordinaria
+    if not _is_extraordinary_level(level):
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Solo se permite actualizar el tipo de nivel a {LevelAcademicType.EXTRAORDINARIA.value}"
+        )
+
     return level_crud.update_level(db, level, level_in)
 
 
 def delete_level(db: Session, level: Level) -> None:
+    # Solo se permite eliminar niveles de tipo Extraordinaria
+    if not _is_extraordinary_level(level):
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Solo se permite eliminar niveles de tipo {LevelAcademicType.EXTRAORDINARIA.value}"
+        )
+
     level_crud.delete_level(db, level)
+
+
+def _is_extraordinary_level(level: LevelCreate | Level) -> bool:
+    return level.type == LevelAcademicType.EXTRAORDINARIA

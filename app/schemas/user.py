@@ -6,7 +6,7 @@ from app.core.enums import UserRole
 
 
 class UserBase(BaseModel):
-    username: str = Field(..., description="Username of the user")
+    username: str = Field(..., max_length=25, description="Username of the user")
     is_active: bool = Field(..., description="Active status of the user", alias="isActive")
     role: UserRole = Field(..., description="Role of the user")
 
@@ -14,7 +14,7 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(..., description="Password of the user")
+    password: str = Field(..., max_length=255, description="Password of the user")
     employee_id: int = Field(..., description="ID of the associated employee", alias="employeeId")
 
 
@@ -28,7 +28,7 @@ class UserRead(UserBase):
 
 
 class UserUpdate(UserBase):
-    username: str | None = Field(None, description="Username of the user")
+    username: str | None = Field(None, max_length=25, description="Username of the user")
     is_active: bool | None = Field(None, description="Active status of the user", alias="isActive")
     role: UserRole | None = Field(None, description="Role of the user")
-    password: str | None = Field(None, description="Password of the user")
+    password: str | None = Field(None, max_length=255, description="Password of the user")

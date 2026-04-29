@@ -4,9 +4,9 @@ from app.core.enums import LevelAcademicType
 
 
 class LevelBase(BaseModel):
-    name: str = Field(..., description="Full name of the educational level")
-    modular_code: str | None = Field(None, description="Modular code for the level", alias="modularCode")
-    tag: str = Field(..., description="Short tag/abbreviation for the level")
+    name: str = Field(..., max_length=25, description="Full name of the educational level")
+    modular_code: str | None = Field(None, max_length=20, description="Modular code for the level", alias="modularCode")
+    tag: str = Field(..., max_length=10, description="Short tag/abbreviation for the level")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -23,8 +23,8 @@ class LevelRead(LevelBase):
 
 
 class LevelUpdate(LevelBase):
-    name: str | None = Field(None, description="Full name of the educational level")
-    modular_code: str | None = Field(None, description="Modular code for the level", alias="modularCode")
-    tag: str | None = Field(None, description="Short tag/abbreviation for the level")
+    name: str | None = Field(None, max_length=25, description="Full name of the educational level")
+    modular_code: str | None = Field(None, max_length=20, description="Modular code for the level", alias="modularCode")
+    tag: str | None = Field(None, max_length=10, description="Short tag/abbreviation for the level")
 
     model_config = ConfigDict(populate_by_name=True)
