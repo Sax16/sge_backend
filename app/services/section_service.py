@@ -57,6 +57,11 @@ def create_section(db: Session, section_in: SectionCreate) -> Section:
 
 
 def update_section(db: Session, section: Section, section_in: SectionUpdate) -> Section:
+    if section_in.grade_id is not None and section_in.grade_id != section.grade_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No se permite cambiar el grado de una sección."
+        )
     return section_crud.update_section(db, section, section_in)
 
 

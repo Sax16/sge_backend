@@ -29,12 +29,13 @@ def create_level(db: Session, level: LevelCreate) -> Level:
 
 
 def update_level(db: Session, level: Level, level_in: LevelUpdate) -> Level:
-    # Solo se permite actualizar el tipo de nivel a Extraordinaria
-    if not _is_extraordinary_level(level):
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Solo se permite actualizar el tipo de nivel a {LevelAcademicType.EXTRAORDINARIA.value}"
-        )
+    # Solo se permite actualizar el codigo modular de los niveles de tipo Regular
+    if level.type == LevelAcademicType.REGULAR:
+        if level_in.name is not None or level_in.tag is not None:
+            raise HTTPException(
+                status_code=400, 
+                detail="No se puede actualizar el nombre o el tag de un nivel de tipo Regular"
+            )
 
     return level_crud.update_level(db, level, level_in)
 
