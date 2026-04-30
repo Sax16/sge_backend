@@ -1,9 +1,38 @@
 from collections.abc import Sequence
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.models.grade import Grade
 from app.schemas.grade import GradeCreate, GradeUpdate
+
+
+def check_duplicate_name_or_tag(
+    db: Session, level_id: int, name: str, tag: str, exclude_id: int | None = None
+) -> str | None:
+    """
+    Check if a grade with the same case-insensitive name (within the level)
+    or tag (globally unique) already exists.
+    Returns 'name' if name conflicts, 'tag' if tag conflicts, else None.
+    """
+    # Tag is globally unique
+    tag_query = db.query(Grade).filter(func.lower(Grade.tag) == tag.lower())
+    if exclude_id is not None:
+        tag_query = tag_query.filter(Grade.id != exclude_id)
+    if tag_query.first():
+        return "tag"
+
+    # Name is unique within the same level
+    name_query = db.query(Grade).filter(
+        Grade.level_id == level_id,
+        func.lower(Grade.name) == name.lower(),
+    )
+    if exclude_id is not None:
+        name_query = name_query.filter(Grade.id != exclude_id)
+    if name_query.first():
+        return "name"
+
+    return None
 
 
 def create_grade(db: Session, grade_in: GradeCreate) -> Grade:
@@ -37,11 +66,3 @@ def update_grade(
 def delete_grade(db: Session, grade: Grade) -> None:
     db.delete(grade)
     db.commit()
-
-
-def get_grade_by_tag(db: Session, tag: str) -> Grade | None:
-    return db.query(Grade).filter(Grade.tag == tag).first()
-
-
-def get_grade_by_name_and_level(db: Session, name: str, level_id: int) -> Grade | None:
-    return db.query(Grade).filter(Grade.name == name, Grade.level_id == level_id).first()

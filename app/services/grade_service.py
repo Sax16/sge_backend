@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 from sqlalchemy.orm import Session
 
@@ -27,12 +27,17 @@ def create_grade(db: Session, grade: GradeCreate) -> Grade:
             status_code=400, 
             detail="No se permite crear grados en un nivel de tipo Regular"
         )
-        
-    if grade_crud.get_grade_by_tag(db, tag=grade.tag):
-        raise HTTPException(status_code=409, detail="Ya existe un grado con este tag")
-        
-    if grade_crud.get_grade_by_name_and_level(db, name=grade.name, level_id=grade.level_id):
-        raise HTTPException(status_code=409, detail="Ya existe un grado con este nombre en el nivel especificado")
+
+    # Validar unicidad (case-insensitive para name y tag)
+    conflict = grade_crud.check_duplicate_name_or_tag(
+        db, grade.level_id, grade.name, grade.tag
+    )
+    if conflict:
+        field_es = "nombre" if conflict == "name" else "tag"
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Ya existe un grado con ese {field_es}."
+        )
         
     return grade_crud.create_grade(db, grade)
 
@@ -43,14 +48,21 @@ def update_grade(db: Session, grade: Grade, grade_in: GradeUpdate) -> Grade:
             status_code=400, 
             detail="No se permite editar o actualizar grados que pertenecen a un nivel de tipo Regular"
         )
-        
-    if grade_in.tag is not None and grade_in.tag != grade.tag:
-        if grade_crud.get_grade_by_tag(db, tag=grade_in.tag):
-            raise HTTPException(status_code=409, detail="Ya existe un grado con este tag")
-            
-    if grade_in.name is not None and grade_in.name != grade.name:
-        if grade_crud.get_grade_by_name_and_level(db, name=grade_in.name, level_id=grade.level_id):
-            raise HTTPException(status_code=409, detail="Ya existe un grado con este nombre en este nivel")
+
+    # Resolver valores efectivos (lo que viene en el payload o lo que ya existe)
+    name = grade_in.name if grade_in.name is not None else grade.name
+    tag = grade_in.tag if grade_in.tag is not None else grade.tag
+
+    # Validar unicidad (case-insensitive para name y tag)
+    conflict = grade_crud.check_duplicate_name_or_tag(
+        db, grade.level_id, name, tag, exclude_id=grade.id
+    )
+    if conflict:
+        field_es = "nombre" if conflict == "name" else "tag"
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Ya existe un grado con ese {field_es}."
+        )
 
     return grade_crud.update_grade(db, grade, grade_in)
 

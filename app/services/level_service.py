@@ -1,6 +1,6 @@
 from app.core.enums import LevelAcademicType
 from collections.abc import Sequence
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 from sqlalchemy.orm import Session
 
@@ -25,15 +25,20 @@ def create_level(db: Session, level: LevelCreate) -> Level:
             detail=f"Solo se permite crear niveles de tipo {LevelAcademicType.EXTRAORDINARIA.value}"
         )
 
-    # Validar unicidad
-    if level_crud.get_level_by_name(db, level.name):
-        raise HTTPException(status_code=409, detail=f"El nivel con el nombre '{level.name}' ya existe.")
-    
-    if level_crud.get_level_by_tag(db, level.tag):
-        raise HTTPException(status_code=409, detail=f"El tag '{level.tag}' ya está en uso.")
+    # Validar unicidad (case-insensitive para name y tag)
+    conflict = level_crud.check_duplicate_name_or_tag(db, level.name, level.tag)
+    if conflict:
+        field_es = "nombre" if conflict == "name" else "tag"
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Ya existe un nivel con ese {field_es}."
+        )
         
     if level.modular_code and level_crud.get_level_by_modular_code(db, level.modular_code):
-        raise HTTPException(status_code=409, detail=f"El código modular '{level.modular_code}' ya está asignado a otro nivel.")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"El código modular '{level.modular_code}' ya está asignado a otro nivel."
+        )
 
     return level_crud.create_level(db, level)
 
@@ -47,18 +52,28 @@ def update_level(db: Session, level: Level, level_in: LevelUpdate) -> Level:
                 detail="No se puede actualizar el nombre o el tag de un nivel de tipo Regular"
             )
 
-    # Validar unicidad ignorando el nivel actual
-    if level_in.name is not None and level_in.name != level.name:
-        if level_crud.get_level_by_name(db, level_in.name):
-            raise HTTPException(status_code=409, detail=f"El nivel con el nombre '{level_in.name}' ya existe.")
-            
-    if level_in.tag is not None and level_in.tag != level.tag:
-        if level_crud.get_level_by_tag(db, level_in.tag):
-            raise HTTPException(status_code=409, detail=f"El tag '{level_in.tag}' ya está en uso.")
-            
-    if level_in.modular_code is not None and level_in.modular_code != level.modular_code:
-        if level_crud.get_level_by_modular_code(db, level_in.modular_code):
-            raise HTTPException(status_code=409, detail=f"El código modular '{level_in.modular_code}' ya está asignado a otro nivel.")
+    # Resolver valores efectivos (lo que viene en el payload o lo que ya existe)
+    name = level_in.name if level_in.name is not None else level.name
+    tag = level_in.tag if level_in.tag is not None else level.tag
+
+    # Validar unicidad (case-insensitive para name y tag)
+    conflict = level_crud.check_duplicate_name_or_tag(db, name, tag, exclude_id=level.id)
+    if conflict:
+        field_es = "nombre" if conflict == "name" else "tag"
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Ya existe un nivel con ese {field_es}."
+        )
+
+    if level_in.modular_code is not None:
+        existing = level_crud.get_level_by_modular_code(
+            db, level_in.modular_code, exclude_id=level.id
+        )
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"El código modular '{level_in.modular_code}' ya está asignado a otro nivel."
+            )
 
     return level_crud.update_level(db, level, level_in)
 
