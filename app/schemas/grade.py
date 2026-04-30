@@ -1,10 +1,15 @@
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Annotated
+
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints
+
+TrimmedString25 = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=25)]
+TrimmedString10 = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=10)]
 
 
 class GradeBase(BaseModel):
-    name: str = Field(..., max_length=25, description="Full name of the academic grade")
-    tag: str = Field(..., max_length=10, description="Short tag/abbreviation for the grade")
-    level_id: int = Field(..., description="ID of the associated educational level", alias="levelId")
+    name: TrimmedString25 = Field(..., description="Full name of the academic grade")
+    tag: TrimmedString10 = Field(..., description="Short tag/abbreviation for the grade")
+    level_id: int = Field(..., gt=0, description="ID of the associated educational level", alias="levelId")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -19,9 +24,8 @@ class GradeRead(GradeBase):
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
-class GradeUpdate(GradeBase):
-    name: str | None = Field(None, max_length=25, description="Full name of the academic grade")
-    tag: str | None = Field(None, max_length=10, description="Short tag/abbreviation for the grade")
-    level_id: int | None = Field(None, description="ID of the associated educational level", alias="levelId")
+class GradeUpdate(BaseModel):
+    name: TrimmedString25 | None = Field(None, description="Full name of the academic grade")
+    tag: TrimmedString10 | None = Field(None, description="Short tag/abbreviation for the grade")
 
     model_config = ConfigDict(populate_by_name=True)

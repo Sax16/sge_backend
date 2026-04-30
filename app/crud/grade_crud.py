@@ -37,3 +37,11 @@ def update_grade(
 def delete_grade(db: Session, grade: Grade) -> None:
     db.delete(grade)
     db.commit()
+
+
+def get_grade_by_tag(db: Session, tag: str) -> Grade | None:
+    return db.query(Grade).filter(Grade.tag == tag).first()
+
+
+def get_grade_by_name_and_level(db: Session, name: str, level_id: int) -> Grade | None:
+    return db.query(Grade).filter(Grade.name == name, Grade.level_id == level_id).first()

@@ -1,10 +1,40 @@
 from collections.abc import Sequence
 
-from sqlalchemy import func
+from sqlalchemy import exists, func
 from sqlalchemy.orm import Session
 
+from app.models.enrollment import Enrollment
 from app.models.section import Section
 from app.schemas.section import SectionCreate, SectionUpdate
+
+
+def check_duplicate_name_or_tag(
+    db: Session, grade_id: int, name: str, tag: str, exclude_id: str | None = None
+) -> str | None:
+    """
+    Check if a section with the same case-insensitive name or tag already exists in the grade.
+    Returns 'name' if name conflicts, 'tag' if tag conflicts, else None.
+    """
+    query = db.query(Section).filter(
+        Section.grade_id == grade_id,
+        (func.lower(Section.name) == name.lower()) | (func.lower(Section.tag) == tag.lower())
+    )
+    if exclude_id:
+        query = query.filter(Section.id != exclude_id)
+        
+    conflict = query.first()
+    if conflict:
+        if conflict.name.lower() == name.lower():
+            return "name"
+        return "tag"
+    return None
+
+
+def has_enrollments(db: Session, section_id: str) -> bool:
+    """Check if a section has any associated enrollments."""
+    return db.query(
+        exists().where(Enrollment.section_id == section_id)
+    ).scalar()
 
 
 def get_max_id_by_prefix(db: Session, prefix: str) -> str | None:

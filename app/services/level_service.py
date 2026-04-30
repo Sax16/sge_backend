@@ -25,6 +25,16 @@ def create_level(db: Session, level: LevelCreate) -> Level:
             detail=f"Solo se permite crear niveles de tipo {LevelAcademicType.EXTRAORDINARIA.value}"
         )
 
+    # Validar unicidad
+    if level_crud.get_level_by_name(db, level.name):
+        raise HTTPException(status_code=409, detail=f"El nivel con el nombre '{level.name}' ya existe.")
+    
+    if level_crud.get_level_by_tag(db, level.tag):
+        raise HTTPException(status_code=409, detail=f"El tag '{level.tag}' ya está en uso.")
+        
+    if level.modular_code and level_crud.get_level_by_modular_code(db, level.modular_code):
+        raise HTTPException(status_code=409, detail=f"El código modular '{level.modular_code}' ya está asignado a otro nivel.")
+
     return level_crud.create_level(db, level)
 
 
@@ -37,6 +47,19 @@ def update_level(db: Session, level: Level, level_in: LevelUpdate) -> Level:
                 detail="No se puede actualizar el nombre o el tag de un nivel de tipo Regular"
             )
 
+    # Validar unicidad ignorando el nivel actual
+    if level_in.name is not None and level_in.name != level.name:
+        if level_crud.get_level_by_name(db, level_in.name):
+            raise HTTPException(status_code=409, detail=f"El nivel con el nombre '{level_in.name}' ya existe.")
+            
+    if level_in.tag is not None and level_in.tag != level.tag:
+        if level_crud.get_level_by_tag(db, level_in.tag):
+            raise HTTPException(status_code=409, detail=f"El tag '{level_in.tag}' ya está en uso.")
+            
+    if level_in.modular_code is not None and level_in.modular_code != level.modular_code:
+        if level_crud.get_level_by_modular_code(db, level_in.modular_code):
+            raise HTTPException(status_code=409, detail=f"El código modular '{level_in.modular_code}' ya está asignado a otro nivel.")
+
     return level_crud.update_level(db, level, level_in)
 
 
@@ -46,6 +69,13 @@ def delete_level(db: Session, level: Level) -> None:
         raise HTTPException(
             status_code=400, 
             detail=f"Solo se permite eliminar niveles de tipo {LevelAcademicType.EXTRAORDINARIA.value}"
+        )
+
+    # Validar que no tenga grados asociados
+    if level.grades:
+        raise HTTPException(
+            status_code=400,
+            detail="No se puede eliminar este nivel porque tiene grados asociados. Elimine o reasigne los grados primero."
         )
 
     level_crud.delete_level(db, level)

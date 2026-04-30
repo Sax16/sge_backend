@@ -52,18 +52,42 @@ def get_sections(db: Session, skip: int = 0, limit: int = 100) -> Sequence[Secti
 
 def create_section(db: Session, section_in: SectionCreate) -> Section:
     level_type = _resolve_level_type(db, section_in.grade_id)
+    
+    conflict = section_crud.check_duplicate_name_or_tag(
+        db, section_in.grade_id, section_in.name, section_in.tag
+    )
+    if conflict:
+        field_es = "nombre" if conflict == "name" else "tag"
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Ya existe una sección con ese {field_es} en este grado."
+        )
+
     section_id = _generate_section_id(db, level_type)
     return section_crud.create_section(db, section_id, section_in)
 
 
 def update_section(db: Session, section: Section, section_in: SectionUpdate) -> Section:
-    if section_in.grade_id is not None and section_in.grade_id != section.grade_id:
+    name = section_in.name if section_in.name is not None else section.name
+    tag = section_in.tag if section_in.tag is not None else section.tag
+    
+    conflict = section_crud.check_duplicate_name_or_tag(
+        db, section.grade_id, name, tag, exclude_id=section.id
+    )
+    if conflict:
+        field_es = "nombre" if conflict == "name" else "tag"
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No se permite cambiar el grado de una sección."
+            detail=f"Ya existe una sección con ese {field_es} en este grado."
         )
+
     return section_crud.update_section(db, section, section_in)
 
 
 def delete_section(db: Session, section: Section) -> None:
+    if section_crud.has_enrollments(db, section.id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No se puede eliminar la sección porque tiene alumnos matriculados."
+        )
     section_crud.delete_section(db, section)

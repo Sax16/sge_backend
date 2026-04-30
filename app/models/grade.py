@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, SmallInteger, String
+from sqlalchemy import Column, ForeignKey, SmallInteger, String, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
@@ -16,6 +16,10 @@ class Grade(Base):
         sections: List of sections belonging to this grade.
     """
     __tablename__ = "grade"
+
+    __table_args__ = (
+        UniqueConstraint("name", "level_id", name="uix_grade_name_level"),
+    )
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="Grade ID")
     name = Column(String(25), nullable=False, index=True, comment="Name of the academic grade")

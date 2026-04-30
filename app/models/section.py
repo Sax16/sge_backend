@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, SmallInteger, String
+from sqlalchemy import Column, ForeignKey, SmallInteger, String, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
@@ -15,10 +15,14 @@ class Section(Base):
         grade_id (int): Foreign key referencing the associated grade.
     """
     __tablename__ = "section"
+    __table_args__ = (
+        UniqueConstraint("name", "grade_id", name="uq_section_name_per_grade"),
+        UniqueConstraint("tag", "grade_id", name="uq_section_tag_per_grade"),
+    )
 
     id = Column(String(6), primary_key=True, comment="Section code (e.g., 'SR-001', 'SE-001')")
-    name = Column(String(25), nullable=False, unique=True, index=True, comment="Name of the section")
-    tag = Column(String(10), unique=True, nullable=False, comment="Short tag/abbreviation for the section")
+    name = Column(String(25), nullable=False, index=True, comment="Name of the section")
+    tag = Column(String(10), nullable=False, comment="Short tag/abbreviation for the section")
     grade_id = Column(
         SmallInteger,
         ForeignKey("grade.id", ondelete="RESTRICT"),

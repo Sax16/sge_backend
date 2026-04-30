@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, SmallInteger, String
+from sqlalchemy import Column, DateTime, ForeignKey, SmallInteger, String, CheckConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -28,6 +28,13 @@ class School(Base):
     """
     __tablename__ = "school"
 
+    __table_args__ = (
+        CheckConstraint(
+            'headmaster_id != deputy_director_id', 
+            name='check_headmaster_neq_deputy'
+        ),
+    )
+
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="School ID")
     company_name = Column(String(255), nullable=False, comment="Commercial name of the school")
     business_name = Column(String(255), nullable=False, comment="Legal business name of the institution")
@@ -36,7 +43,7 @@ class School(Base):
     email = Column(String(50), nullable=False, comment="Institutional contact email")
     phone_number = Column(String(15), nullable=False, comment="Institutional contact phone number")
     logo_path = Column(String(255), comment="File path or URL to the school's logo")
-    ruc = Column(String(15), nullable=False, comment="Tax identification number (RUC)")
+    ruc = Column(String(11), nullable=False, unique=True, comment="Tax identification number (RUC)")
     dre = Column(String(50), comment="Regional Education Directorate (DRE)")
     ugel = Column(String(50), comment="Local Education Management Unit (UGEL)")
     headmaster_id = Column(

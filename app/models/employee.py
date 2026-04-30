@@ -36,7 +36,7 @@ class Employee(Base):
     gender = Column(Enum(Gender), nullable=False, comment="Employee's gender")
     birth_date = Column(Date, comment="Date of birth")
     phone_number = Column(String(15), nullable=False, comment="Contact phone number")
-    email = Column(String(50), index=True, comment="Contact email address")
+    email = Column(String(50), unique=True, index=True, comment="Contact email address")
     address = Column(String(75), comment="Physical address")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true", comment="Employment status flag")
     position = Column(Enum(EmployeePosition), nullable=False, comment="Current position in company")

@@ -18,6 +18,18 @@ def get_level(db: Session, level_id: int | str) -> Level | None:
     return db.query(Level).filter(Level.id == level_id).first()
 
 
+def get_level_by_name(db: Session, name: str) -> Level | None:
+    return db.query(Level).filter(Level.name == name).first()
+
+
+def get_level_by_tag(db: Session, tag: str) -> Level | None:
+    return db.query(Level).filter(Level.tag == tag).first()
+
+
+def get_level_by_modular_code(db: Session, modular_code: str) -> Level | None:
+    return db.query(Level).filter(Level.modular_code == modular_code).first()
+
+
 def get_levels(db: Session, skip: int = 0, limit: int = 100) -> Sequence[Level]:
     return db.query(Level).order_by(Level.id).offset(skip).limit(limit).all()
 

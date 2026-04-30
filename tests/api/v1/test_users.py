@@ -15,7 +15,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from app.core.enums import UserRole
+from app.core.enums import UserRole, EmployeePosition
 from tests.api.v1.conftest import EmployeeFactory, UserFactory
 
 # ---------------------------------------------------------------------------
@@ -102,7 +102,7 @@ class TestCreateUser:
         self, client_super_admin: TestClient, db_session: Session
     ):
         """Creating a user with valid data returns 201."""
-        emp = EmployeeFactory.create(db_session)
+        emp = EmployeeFactory.create(db_session, position=EmployeePosition.SECRETARIA)
         payload = _user_payload(emp.id)
 
         response = client_super_admin.post(BASE_URL, json=payload)
@@ -116,8 +116,8 @@ class TestCreateUser:
         self, client_super_admin: TestClient, db_session: Session
     ):
         """Creating a user with an existing username returns 400."""
-        emp1 = EmployeeFactory.create(db_session)
-        emp2 = EmployeeFactory.create(db_session)
+        emp1 = EmployeeFactory.create(db_session, position=EmployeePosition.SECRETARIA)
+        emp2 = EmployeeFactory.create(db_session, position=EmployeePosition.SECRETARIA)
         UserFactory.create(db_session, username="duplicate_name", employee=emp1)
 
         payload = _user_payload(emp2.id, username="duplicate_name")
@@ -140,7 +140,7 @@ class TestCreateUser:
         self, client_super_admin: TestClient, db_session: Session
     ):
         """Creating a user for an employee that already has a user returns 400."""
-        emp = EmployeeFactory.create(db_session)
+        emp = EmployeeFactory.create(db_session, position=EmployeePosition.SECRETARIA)
         UserFactory.create(db_session, employee=emp)
 
         payload = _user_payload(emp.id, username="another_user")
@@ -153,7 +153,7 @@ class TestCreateUser:
         self, client_super_admin: TestClient, db_session: Session
     ):
         """Omitting required fields returns 422."""
-        emp = EmployeeFactory.create(db_session)
+        emp = EmployeeFactory.create(db_session, position=EmployeePosition.SECRETARIA)
         payload = _user_payload(emp.id)
         del payload["password"]
 
@@ -172,7 +172,8 @@ class TestUpdateUser:
         self, client_super_admin: TestClient, db_session: Session
     ):
         """Updating a user returns 204 No Content."""
-        user = UserFactory.create(db_session, username="to_update")
+        emp = EmployeeFactory.create(db_session, position=EmployeePosition.SECRETARIA)
+        user = UserFactory.create(db_session, username="to_update", employee=emp)
 
         payload = {
             "username": "updated_user",
