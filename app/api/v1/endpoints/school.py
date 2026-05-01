@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from app.services import school_service
-from app.dependencies import get_db, check_admin_or_super_admin
+from app.dependencies import get_db, check_super_admin
 from app.schemas.school import SchoolCreate, SchoolRead, SchoolUpdate
 
 
-router = APIRouter(dependencies=[Depends(check_admin_or_super_admin)])
+router = APIRouter(dependencies=[Depends(check_super_admin)])
 
 
 @router.post(
@@ -18,7 +18,7 @@ router = APIRouter(dependencies=[Depends(check_admin_or_super_admin)])
 Registra la información general de la institución educativa.
 Solo se permite **un único registro** de colegio en el sistema.
 
-**Requiere:** Rol `ADMIN` o `SUPER_ADMIN`.
+**Requiere:** Rol `SUPER_ADMIN`.
 
 **Reglas de negocio:**
 - No puede existir más de un colegio registrado.
@@ -90,7 +90,7 @@ def create_school(
 Retorna la información completa del colegio, incluyendo datos
 fiscales, directivos asignados y timestamps.
 
-**Requiere:** Rol `ADMIN` o `SUPER_ADMIN`.
+**Requiere:** Rol `SUPER_ADMIN`.
 """,
     responses={
         200: {"description": "Colegio encontrado"},
@@ -114,7 +114,7 @@ def get_school(
 Actualiza los datos del colegio. Solo se modifican los campos
 enviados (actualización parcial).
 
-**Requiere:** Rol `ADMIN` o `SUPER_ADMIN`.
+**Requiere:** Rol `SUPER_ADMIN`.
 
 **Reglas de negocio:**
 - Si se cambia el `headmasterId`, el nuevo empleado debe existir y

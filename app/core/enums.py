@@ -49,22 +49,21 @@ class ExpenseType(str, Enum):
 
 
 class ManagementType(str, Enum):
-    PRIVADO = "Privada"
-    PUBLICO = "Pública"
-    OTRO = "Otro"
+    PRIVADA = "Privada"
+    PUBLICA = "Pública"
 
 
 class Ugel(str, Enum):
     SATIPO = "Satipo"
-    RIO_TAMBO = "Rio Tambo"
-    RIO_NEGRO = "Rio Negro"
-    LA_MERCED = "La Merced"
-    CONCEPCION = "Concepcion"
-    JAUJA = "Jauja"
-    PICHANAKI = "Pichanaki"
+    RIO_NEGRO = "Río Negro"
     MAZAMARI = "Mazamari"
-    HUANCAYO = "Huancayo"
     PANGOA = "Pangoa"
+    PICHANAKI = "Pichanaki"
+    RIO_TAMBO = "Río Tambo"
+    LA_MERCED = "La Merced"
+    CONCEPCION = "Concepción"
+    JAUJA = "Jauja"
+    HUANCAYO = "Huancayo"
     OTRO = "Otro"
 
 class RelationshipType(str, Enum):

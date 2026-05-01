@@ -69,6 +69,14 @@ def update_employee(db: Session, employee: Employee, employee_in: EmployeeUpdate
                 status_code=400, 
                 detail="No se puede desactivar al empleado porque actualmente es Subdirector de un colegio."
             )
+
+    # 4.1. Regla de negocio: El director o subdirector no puede cambiar de posición si tiene cargos activos en schools.
+    if employee_in.position is not None and employee.position in [EmployeePosition.DIRECTOR, EmployeePosition.SUBDIRECTOR] and employee.school_as_headmaster:
+        raise HTTPException(
+            status_code=400, 
+            detail="No se puede cambiar la posición del empleado porque actualmente es Director o subdirector del colegio."
+        )
+    
     # 5. Regla de negocio: Coherencia de roles al cambiar de posición
     if employee_in.position is not None and employee_in.position != employee.position:
         if employee.user:
