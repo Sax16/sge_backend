@@ -19,8 +19,8 @@ class EmployeePosition(str, Enum):
 
 
 class UserRole(str, Enum):
-    SUPER_ADMIN = "SUPER_ADMIN"
-    ADMIN = "ADMIN"
+    SUPER_ADMIN = "Super Admin"
+    ADMIN = "Admin"
 
 
 class LevelAcademicType(str, Enum):

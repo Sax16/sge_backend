@@ -6,7 +6,7 @@ from app.core.enums import UserRole
 
 
 class UserBase(BaseModel):
-    username: str = Field(..., min_length=3, max_length=25, pattern=r"^[a-zA-Z0-9_]+$", description="Username of the user")
+    username: str = Field(..., min_length=4, max_length=15, pattern=r"^[a-zA-Z0-9_]+$", description="Username of the user")
     is_active: bool = Field(..., description="Active status of the user", alias="isActive")
     role: UserRole = Field(..., description="Role of the user")
 
@@ -14,7 +14,7 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=4, max_length=15, description="Password of the user (pre-hash)")
+    password: str = Field(..., min_length=6, max_length=15, description="Password of the user (pre-hash)")
     employee_id: int = Field(..., gt=0, description="ID of the associated employee", alias="employeeId")
 
 
@@ -28,7 +28,7 @@ class UserRead(UserBase):
 
 
 class UserUpdate(UserBase):
-    username: str | None = Field(None, min_length=3, max_length=25, pattern=r"^[a-zA-Z0-9_]+$", description="Username of the user")
+    username: str | None = Field(None, min_length=4, max_length=15, pattern=r"^[a-zA-Z0-9_]+$", description="Username of the user")
     is_active: bool | None = Field(None, description="Active status of the user", alias="isActive")
     role: UserRole | None = Field(None, description="Role of the user")
-    password: str | None = Field(None, min_length=4, max_length=15, description="Password of the user (pre-hash)")
+    password: str | None = Field(None, min_length=6, max_length=15, description="Password of the user (pre-hash)")

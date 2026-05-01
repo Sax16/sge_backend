@@ -67,8 +67,8 @@ Crea un nuevo usuario del sistema vinculado a un empleado existente.
 **Requiere:** Rol `SUPER_ADMIN`.
 
 **Reglas de negocio:**
-- El `username` debe ser único (3-25 caracteres alfanuméricos o `_`).
-- El `password` debe tener entre 4 y 15 caracteres (se hashea antes de almacenar).
+- El `username` debe ser único (4-15 caracteres alfanuméricos o `_`).
+- El `password` debe tener entre 6 y 15 caracteres (se hashea antes de almacenar).
 - El empleado asociado debe existir y estar **activo**.
 - Un empleado solo puede tener **un usuario** asignado.
 - **Coherencia rol-posición:**
