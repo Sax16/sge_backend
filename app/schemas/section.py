@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class SectionBase(BaseModel):
-    name: str = Field(..., min_length=1, max_length=25, description="Full name of the section")
+    name: str = Field(..., min_length=1, max_length=15, description="Full name of the section")
     tag: str = Field(..., min_length=1, max_length=10, description="Short tag/abbreviation for the section")
     grade_id: int = Field(..., description="ID of the associated grade", alias="gradeId")
 
@@ -35,7 +35,7 @@ class SectionRead(SectionBase):
 
 
 class SectionUpdate(BaseModel):
-    name: str | None = Field(None, min_length=1, max_length=25, description="Full name of the section")
+    name: str | None = Field(None, min_length=1, max_length=15, description="Full name of the section")
     tag: str | None = Field(None, min_length=1, max_length=10, description="Short tag/abbreviation for the section")
 
     @field_validator("name", mode="before")

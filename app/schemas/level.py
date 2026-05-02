@@ -4,9 +4,10 @@ from app.core.enums import LevelAcademicType
 
 
 class LevelBase(BaseModel):
-    name: str = Field(..., min_length=2, max_length=25, description="Full name of the educational level")
+    name: str = Field(..., min_length=4, max_length=15, description="Full name of the educational level")
     modular_code: str | None = Field(None, min_length=5, max_length=20, pattern=r"^[a-zA-Z0-9]+$", description="Modular code for the level", alias="modularCode")
     tag: str = Field(..., min_length=2, max_length=10, description="Short tag/abbreviation for the level")
+    type: LevelAcademicType = Field(..., description="Type or modality of the level")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -30,18 +31,16 @@ class LevelBase(BaseModel):
 
 
 class LevelCreate(LevelBase):
-    type: LevelAcademicType = Field(..., description="Type or modality of the level")
-
+    pass
 
 class LevelRead(LevelBase):
     id: int = Field(..., description="Level ID")
-    type: LevelAcademicType = Field(..., description="Type or modality of the level")
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
-class LevelUpdate(LevelBase):
-    name: str | None = Field(None, min_length=2, max_length=25, description="Full name of the educational level")
+class LevelUpdate(BaseModel):
+    name: str | None = Field(None, min_length=4, max_length=15, description="Full name of the educational level")
     modular_code: str | None = Field(None, min_length=5, max_length=20, pattern=r"^[a-zA-Z0-9]+$", description="Modular code for the level", alias="modularCode")
     tag: str | None = Field(None, min_length=2, max_length=10, description="Short tag/abbreviation for the level")
 

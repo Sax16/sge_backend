@@ -21,7 +21,7 @@ class Section(Base):
     )
 
     id = Column(String(6), primary_key=True, comment="Section code (e.g., 'SR-001', 'SE-001')")
-    name = Column(String(25), nullable=False, index=True, comment="Name of the section")
+    name = Column(String(15), nullable=False, index=True, comment="Name of the section")
     tag = Column(String(10), nullable=False, comment="Short tag/abbreviation for the section")
     grade_id = Column(
         SmallInteger,

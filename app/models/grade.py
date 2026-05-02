@@ -22,7 +22,7 @@ class Grade(Base):
     )
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="Grade ID")
-    name = Column(String(25), nullable=False, index=True, comment="Name of the academic grade")
+    name = Column(String(15), nullable=False, index=True, comment="Name of the academic grade")
     tag = Column(String(10), unique=True, nullable=False, comment="Short tag/abbreviation for the grade")
     level_id = Column(
         SmallInteger,

@@ -42,7 +42,7 @@ class School(Base):
     management = Column(Enum(ManagementType), nullable=False, comment="Name of the management or administrative unit")
     address = Column(String(150), nullable=False, comment="Physical address of the school")
     email = Column(String(50), nullable=False, comment="Institutional contact email")
-    phone_number = Column(String(15), nullable=False, comment="Institutional contact phone number")
+    phone_number = Column(String(9), nullable=False, comment="Institutional contact phone number")
     logo_path = Column(String(255), comment="File path or URL to the school's logo")
     ruc = Column(String(11), nullable=False, unique=True, comment="Tax identification number (RUC)")
     dre = Column(String(50), comment="Regional Education Directorate (DRE)")

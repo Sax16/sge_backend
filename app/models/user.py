@@ -22,7 +22,7 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="User ID")
-    username = Column(String(25), nullable=False, unique=True, index=True, comment="Username of the user")
+    username = Column(String(15), nullable=False, unique=True, index=True, comment="Username of the user")
     password = Column(String(255), nullable=False, comment="Password of the user")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true", comment="Active status of the user")
     role = Column(Enum(UserRole), nullable=False, default=UserRole.ADMIN, server_default=UserRole.ADMIN.value, comment="Role of the user")

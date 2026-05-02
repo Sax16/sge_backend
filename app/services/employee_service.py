@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+from datetime import date
 
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
@@ -7,6 +8,21 @@ from app.core.enums import UserRole, EmployeePosition
 from app.models.employee import Employee
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate
 from app.crud import employee_crud
+
+
+def _validate_minimum_age(birth_date: date | None, min_age: int = 18) -> None:
+    """Regla de negocio: el empleado debe ser mayor de `min_age` años."""
+    if birth_date is None:
+        return
+    today = date.today()
+    age = today.year - birth_date.year - (
+        (today.month, today.day) < (birth_date.month, birth_date.day)
+    )
+    if age < min_age:
+        raise HTTPException(
+            status_code=422,
+            detail=f"El empleado debe ser mayor de {min_age} años"
+        )
 
 
 def get_employee(db: Session, employee_id: int) -> Employee | None:
@@ -18,7 +34,11 @@ def get_employees(db: Session, skip: int = 0, limit: int = 100) -> Sequence[Empl
 
 
 def create_employee(db: Session, employee: EmployeeCreate) -> Employee:
-    # 1. Verificar si el DNI ya existe
+    # 1. Regla de negocio: edad mínima
+    if employee.birth_date is not None:
+        _validate_minimum_age(employee.birth_date)
+
+    # 2. Verificar si el DNI ya existe
     existing_employee = employee_crud.get_employee_by_dni(db, employee.dni)
     if existing_employee:
         raise HTTPException(status_code=400, detail="Ya existe un empleado con el mismo DNI")
@@ -39,7 +59,11 @@ def create_employee(db: Session, employee: EmployeeCreate) -> Employee:
 
 
 def update_employee(db: Session, employee: Employee, employee_in: EmployeeUpdate) -> Employee:
-    # 1. Verificar si el DNI ya existe
+    # 1. Regla de negocio: edad mínima
+    if employee_in.birth_date is not None:
+        _validate_minimum_age(employee_in.birth_date)
+
+    # 2. Verificar si el DNI ya existe
     if employee_in.dni is not None and employee_in.dni != employee.dni:
         existing_employee = employee_crud.get_employee_by_dni(db, employee_in.dni)
         if existing_employee:

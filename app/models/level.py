@@ -19,7 +19,7 @@ class Level(Base):
     __tablename__ = "level"
 
     id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True, comment="Level ID")
-    name = Column(String(25), nullable=False, unique=True, index=True, comment="Name of the educational level")
+    name = Column(String(15), nullable=False, unique=True, index=True, comment="Name of the educational level")
     modular_code = Column(String(20), unique=True, comment="Modular code for the level")
     type = Column(Enum(LevelAcademicType), nullable=False, comment="Type or modality of the level")
     tag = Column(String(10), unique=True, nullable=False, comment="Short tag/abbreviation for the level")
