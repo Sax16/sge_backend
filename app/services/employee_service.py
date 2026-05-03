@@ -114,12 +114,12 @@ def update_employee(db: Session, employee: Employee, employee_in: EmployeeUpdate
             if employee.user.role == UserRole.SUPER_ADMIN and new_position != EmployeePosition.ADMINISTRATIVO:
                 raise HTTPException(
                     status_code=400, 
-                    detail="No se puede cambiar la posición: el empleado tiene un usuario SUPER_ADMIN y requiere ser ADMINISTRATIVO."
+                    detail="No se puede cambiar la posición: el empleado tiene un usuario " + UserRole.SUPER_ADMIN.value + " y requiere ser " + EmployeePosition.ADMINISTRATIVO.value + "."
                 )
             elif employee.user.role == UserRole.ADMIN and new_position not in allowed_admin_positions:
                 raise HTTPException(
                     status_code=400, 
-                    detail="No se puede cambiar la posición: la nueva posición no tiene permisos para el rol ADMIN de su usuario asociado."
+                    detail="No se puede cambiar la posición: la nueva posición no tiene permisos para el rol " + UserRole.ADMIN.value + " de su usuario asociado."
                 )
 
     return employee_crud.update_employee(db, employee, employee_in)

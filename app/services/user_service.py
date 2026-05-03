@@ -53,12 +53,12 @@ def create_user(db: Session, user: UserCreate) -> User:
     if user.role == UserRole.SUPER_ADMIN and existing_employee.position != EmployeePosition.ADMINISTRATIVO:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="Solo los empleados con posición ADMINISTRATIVO pueden ser SUPER_ADMIN."
+            detail="Solo los empleados con posición " + EmployeePosition.ADMINISTRATIVO.value + " pueden ser " + UserRole.SUPER_ADMIN.value + "."
         )
     elif user.role == UserRole.ADMIN and existing_employee.position not in allowed_admin_positions:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="El empleado no tiene una posición permitida para ser ADMIN."
+            detail="El empleado no tiene una posición permitida para ser " + UserRole.ADMIN.value + "."
         )
 
     # Hash the password
@@ -89,17 +89,18 @@ def update_user(db: Session, user: User, user_in: UserUpdate) -> User:
         EmployeePosition.PROMOTOR, 
         EmployeePosition.SUBDIRECTOR, 
         EmployeePosition.DIRECTOR, 
-        EmployeePosition.SECRETARIA
+        EmployeePosition.SECRETARIA,
+        EmployeePosition.ADMINISTRATIVO
     ]
     if new_role == UserRole.SUPER_ADMIN and employee.position != EmployeePosition.ADMINISTRATIVO:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="Solo los empleados con posición ADMINISTRATIVO pueden ser SUPER_ADMIN."
+            detail="Solo los empleados con posición " + EmployeePosition.ADMINISTRATIVO.value + " pueden ser " + UserRole.SUPER_ADMIN.value + "."
         )
     elif new_role == UserRole.ADMIN and employee.position not in allowed_admin_positions:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="El empleado no tiene una posición permitida para ser ADMIN."
+            detail="El empleado no tiene una posición permitida para ser " + UserRole.ADMIN.value + "."
         )
 
     # Validate Super Admin Lockout
@@ -108,7 +109,7 @@ def update_user(db: Session, user: User, user_in: UserUpdate) -> User:
         if super_admins_count <= 1:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No se puede modificar o desactivar al último SUPER_ADMIN activo del sistema."
+                detail="No se puede modificar o desactivar al último " + UserRole.SUPER_ADMIN.value + " activo del sistema."
             )
 
     # Hash the password if it exists
@@ -119,6 +120,15 @@ def update_user(db: Session, user: User, user_in: UserUpdate) -> User:
 
 
 def delete_user(db: Session, user: User) -> None:
+    # Validate Super Admin Lockout
+    if user.role == UserRole.SUPER_ADMIN:
+        super_admins_count = db.query(User).filter(User.role == UserRole.SUPER_ADMIN, User.is_active == True).count()
+        if super_admins_count <= 1:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No se puede eliminar al último " + UserRole.SUPER_ADMIN.value + " activo del sistema."
+            )
+
     # Verify if user has associated operations before deleting
     if user.expenses or user.enrollments or user.charges or user.receipts or user.employee_payments:
         raise HTTPException(
