@@ -35,7 +35,8 @@ class AcademicPeriodType(str, Enum):
 
 
 class StudentStatus(str, Enum):
-    ACTIVO = "Activo"
+    MATRICULADO = "Matriculado"
+    PENDIENTE = "Pendiente"
     INACTIVO = "Inactivo"
     RETIRADO = "Retirado"
     EGRESADO = "Egresado"

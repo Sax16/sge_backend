@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from collections.abc import Sequence
 
 from sqlalchemy.orm import Session
@@ -16,6 +17,10 @@ def create_economic_level(db: Session, economic_level_in: EconomicLevelCreate) -
 
 def get_economic_level(db: Session, economic_level_id: int | str) -> EconomicLevel | None:
     return db.query(EconomicLevel).filter(EconomicLevel.id == economic_level_id).first()
+
+
+def get_economic_level_by_name(db: Session, name: str) -> EconomicLevel | None:
+    return db.query(EconomicLevel).filter(func.lower(EconomicLevel.name) == name.lower()).first()
 
 
 def get_economic_levels(db: Session, skip: int = 0, limit: int = 100) -> Sequence[EconomicLevel]:

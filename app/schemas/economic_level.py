@@ -2,8 +2,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class EconomicLevelBase(BaseModel):
-    name: str = Field(..., description="Level name")
-    description: str | None = Field(None, description="Detailed description")
+    name: str = Field(..., min_length=2, max_length=15, description="Level name")
+    description: str | None = Field(None, min_length=2, max_length=75, description="Detailed description")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -19,7 +19,7 @@ class EconomicLevelRead(EconomicLevelBase):
 
 
 class EconomicLevelUpdate(EconomicLevelBase):
-    name: str | None = Field(None, description="Level name")
-    description: str | None = Field(None, description="Detailed description")
+    name: str | None = Field(None, min_length=2, max_length=15, description="Level name")
+    description: str | None = Field(None, min_length=2, max_length=75, description="Detailed description")
 
     model_config = ConfigDict(populate_by_name=True)
