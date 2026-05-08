@@ -18,6 +18,10 @@ def get_student(db: Session, student_id: int | str) -> Student | None:
     return db.query(Student).options(joinedload(Student.economic_level)).filter(Student.id == student_id).first()
 
 
+def get_student_by_dni(db: Session, dni: str) -> Student | None:
+    return db.query(Student).filter(Student.dni == dni).first()
+
+
 def get_students(db: Session, skip: int = 0, limit: int = 100) -> Sequence[Student]:
     return db.query(Student).options(joinedload(Student.economic_level)).order_by(Student.id).offset(skip).limit(limit).all()
 

@@ -24,11 +24,16 @@ def create_economic_level(db: Session, economic_level: EconomicLevelCreate) -> E
 
 
 def update_economic_level(db: Session, economic_level: EconomicLevel, economic_level_in: EconomicLevelUpdate) -> EconomicLevel:
-    existing_economic_level = economic_level_crud.get_economic_level_by_name(db, economic_level_in.name)
-    if existing_economic_level:
-        raise HTTPException(status_code=400, detail="El nivel económico ya existe")
+    if economic_level_in.name:
+        existing_economic_level = economic_level_crud.get_economic_level_by_name(db, economic_level_in.name)
+        if existing_economic_level and existing_economic_level.id != economic_level.id:
+            raise HTTPException(status_code=400, detail="El nombre del nivel económico ya está en uso")
     return economic_level_crud.update_economic_level(db, economic_level, economic_level_in)
 
 
 def delete_economic_level(db: Session, economic_level: EconomicLevel) -> None:
+    if len(economic_level.students) > 0:
+        raise HTTPException(status_code=400, detail="No se puede eliminar porque tiene estudiantes asociados")
+    if len(economic_level.charge_catalog_amounts) > 0:
+        raise HTTPException(status_code=400, detail="No se puede eliminar porque tiene cobros asociados")
     economic_level_crud.delete_economic_level(db, economic_level)
